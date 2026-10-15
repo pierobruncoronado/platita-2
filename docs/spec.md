@@ -1,4 +1,4 @@
-# Platita 2 — SPEC (Level 3, DRAFT — not frozen until every 🔸 is resolved)
+# Platita 2 — SPEC (Level 3, FROZEN 2026-10-15 — all 🔸 resolved, see "Resolved decisions")
 
 Owner: Piero · Date: 2026-10-15 · Language: English (consumed by Claude Code)
 Design reference (approved by Piero, "está perfecto"): Claude Design canvas "Platita 2 — diseño de la app" (https://claude.ai/artifact/FUMSv5v1mtNQaPVb5CVXBw), 5 boards: Main (Inicio), Semana, Mes, Captura, Ingresos. All numbers in the boards are SAMPLE data except opening balance and the S/130 owed.
@@ -111,6 +111,14 @@ Design reference (approved by Piero, "está perfecto"): Claude Design canvas "Pl
 4. 🔸 Hosting: GitHub Pages (S/0). **Recommend: yes.**
 5. 🔸 XP/level thresholds are placeholders to tune after real use (no invented numbers frozen). **Recommend: ship `level = floor(sqrt(closed_days))` as placeholder and revisit at week 4.**
 6. 🔸 PIN re-lock after 60 s in background. **Recommend: yes.**
+
+## Resolved decisions (2026-10-15, Piero accepted all recommended defaults)
+1. ✅ "Ahorro" = "En cuenta": one balance, opening S/230.84; no second ledger.
+2. ✅ Biometric unlock: 1-session spike in H8; falls back to PIN if it fails on Piero's Android.
+3. ✅ Backup: v1 = local + weekly manual export; Supabase sync only considered after 2 weeks of daily use (v2).
+4. ✅ Hosting: GitHub Pages, public repo (S/0). Repo holds code only — no financial data ever leaves the device.
+5. ✅ XP/levels: placeholder `level = floor(sqrt(closed_days))`, revisit at week 4 (not a frozen threshold).
+6. ✅ PIN re-lock after 60 s in background.
 
 ## Stress checklist
 - [x] Scope shippable; v1 items essential.
