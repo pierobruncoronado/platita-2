@@ -460,18 +460,19 @@ a {
   padding: 0 4px;
 }
 
+/* Destructive action in red: Piero's explicit exception to "red = status only" (spec §4). */
 .delete {
   min-height: 48px;
   border-radius: 16px;
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--muted);
-  font-weight: 600;
+  background: rgba(255, 93, 115, 0.12);
+  border: 1.5px solid var(--red);
+  color: var(--red);
+  font-weight: 700;
   font-size: 15px;
 }
 
 .delete:active {
-  background: var(--surface-2);
+  background: rgba(255, 93, 115, 0.22);
 }
 
 .chips {

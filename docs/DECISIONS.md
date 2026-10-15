@@ -6,6 +6,7 @@ Format per entry: **Qué / Por qué / Cómo / Trade-off / Gotcha**. Newest first
 - **Por qué:** no delete path existed after the toast; amount editing worked in emulation (412×730, keypad visible) but was not discoverable — typing appended to the loaded value and the note's soft keyboard could cover the keypad.
 - **Cómo:** edit mode shows the loaded amount "selected" (tint + hint "Teclea para cambiar el monto") and the first key replaces it; any keypad tap blurs the note (closes the Android keyboard); "Eliminar gasto" sets `undone: true` and shows the same toast with Deshacer (`undoTo: false` restores). Delete button is muted, not red (red/amber = status vs limit only).
 - **Trade-off:** no confirm dialog — the 5 s Deshacer is the safety net, consistent with tile capture.
+- **Update (Piero, same day):** "Eliminar gasto" must be red → red outline + red text on a 12% red tint; spec §4 colors now list destructive actions as the one exception to "red = status only". Re-tested on his Android: edit amount + delete work.
 - **Gotcha:** emulator green ≠ real use: the exact failure wasn't reproducible, so the fix targets both plausible causes; Piero must re-test on the phone.
 
 ## 2026-10-15 — H3 Captura + quick tiles + Deshacer (+ Pages deploy)

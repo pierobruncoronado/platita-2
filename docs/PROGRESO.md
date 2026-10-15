@@ -2,7 +2,7 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H3 · Próximo gate: G1 (H1 y H2 cerrados 2026-10-15)
+Nodo: build · Milestone activo: H4 · Próximo gate: G1 (H1, H2, H3 cerrados 2026-10-15)
 Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
 
 ## Milestones
@@ -27,7 +27,7 @@ Evidencia:
 - G3: entrada "2026-10-15 — H2 money engine" en DECISIONS.md.
 
 ### H3 — Captura + botones rápidos + Deshacer · cubre: AC-1; evals 1, 9, 10
-- [ ] G1 Aceptación (tile = 1 toque; Deshacer 5 s; monto 0 deshabilitado) — PASA en Playwright; falta uso real en el Android de Piero
+- [x] G1 Aceptación (tile = 1 toque; Deshacer 5 s; monto 0 deshabilitado) — PASA en Playwright y en el Android de Piero (2026-10-15: instalada, tile + Deshacer OK; tras fix f034e24 "ya se puede editar y eliminar")
 - [x] G2 code-review — 10 hallazgos, 10 corregidos
 - [x] G3 DECISIONS.md
 - [x] G4 commit + push — 9655e5c pushed; Actions run 38815118270 build+deploy success; https://pierobruncoronado.github.io/platita-2/ verificado en contexto limpio (HTTP 200, S/230.84, manifest + iconos OK, SW controla, tap+Deshacer OK, recarga offline OK)
