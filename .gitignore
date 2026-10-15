@@ -20,3 +20,6 @@ platita-backup*.json
 *.log
 .DS_Store
 Thumbs.db
+
+# tool reports (RTK/vitest)
+.vitest/

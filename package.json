@@ -8,8 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "test": "vitest run",
-    "test:evals": "vitest run --dir src/domain"
+    "test": "vitest run --exclude \"src/**/*.eval.test.ts\"",
+    "test:evals": "vitest run .eval.test"
   },
   "dependencies": {
     "@fontsource/figtree": "^5.3.0",
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",

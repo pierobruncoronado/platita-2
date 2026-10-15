@@ -2,7 +2,7 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H2 · Próximo gate: G1 (H1 cerrado 2026-10-15)
+Nodo: build · Milestone activo: H2 · Próximo gate: G4 push (H1 cerrado 2026-10-15)
 Pendiente fuera de milestone: workflow de deploy a GitHub Pages (antes de H10). Falta `docs/design-reference.html` (bloquea GV desde H3).
 
 ## Milestones
@@ -17,11 +17,14 @@ Evidencia:
 - G4: `git check-ignore` confirma node_modules, dist, .env, exports/ ignorados; `git push -u origin main` → "[new branch] main -> main", origin/main = 4973952.
 
 ### H2 — Motor de dinero (funciones puras) · cubre: AC-2, AC-3, AC-4, AC-5; evals 2,3,4,5,6
-- [ ] G1 Unit tests verdes incl. caso de cambio de zona (eval 3) y cobro parcial (eval 4)
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md
+- [x] G1 Unit tests verdes incl. caso de cambio de zona (eval 3) y cobro parcial (eval 4)
+- [x] G2 code-review — 10 hallazgos: 1 crítico (backdate/undo tras cierre perdía movimientos) + 5 corregidos, 3 anotados como no-acción
+- [x] G3 DECISIONS.md
 - [ ] G4 commit + push ({hash})
 Evidencia:
+- G1: `npm test` → 5 files, 27 passed; `npm run test:evals` → 7 passed (evals 2,3,4,5,6 por nombre); `tsc --noEmit` ok; lint ok; build ok.
+- G2: `/code-review medium` sobre el diff; fix del crítico = ahorro derivado (tests "backdated" y "undo right after midnight"); DST-medianoche verificado con sonda (Santiago 2026-09-06 inicia 01:00).
+- G3: entrada "2026-10-15 — H2 money engine" en DECISIONS.md.
 
 ### H3 — Captura + botones rápidos + Deshacer · cubre: AC-1; evals 1, 9, 10
 - [ ] G1 Aceptación (tile = 1 toque; Deshacer 5 s; monto 0 deshabilitado)
