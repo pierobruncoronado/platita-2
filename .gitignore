@@ -1,0 +1,22 @@
+# dependencies / build
+node_modules/
+dist/
+.vite/
+coverage/
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# real data exports (financial data never leaves the device)
+exports/
+*.export.json
+platita-export*.json
+platita-backup*.json
+
+# tooling / OS
+.playwright-mcp/
+*.log
+.DS_Store
+Thumbs.db
