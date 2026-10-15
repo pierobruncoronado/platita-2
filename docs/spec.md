@@ -55,6 +55,7 @@ Design reference (approved by Piero, "está perfecto"): Claude Design canvas "Pl
 - **Claude cost:** charged on day 7 of each month, real cost ≈ S/87 (Piero's recollection, UNVERIFIED), reimbursement fixed S/80, Piero absorbs the difference. Registered by Piero manually; counted as an expense (category Otros) the week it is charged; reimbursement counts as income the week it is confirmed.
 - **Alcohol is not fixed:** logged like any expense, any amount; S/25 is only the tile default (Piero's habitual max).
 - **Colors (semantic):** green = income/on track; amber/red only for status vs a limit (never category colors); gold = savings. Categories: Transporte orange #FF8A3D, Comida pink #FF5CA8, Bebidas cyan #3FD6E6, Alcohol violet #A878FF, Otros gray #7F8AA0.
+- **Capture taxonomy (Piero, 2026-10-15; overrides the Captura board):** row 1 = 5 categories (Transporte, Comida, Bebidas, Alcohol, Otros); row 2 = optional detail, only where it exists: Transporte → Pasaje, Taxi; Comida → Snack, Menú; Bebidas/Alcohol/Otros → none. The selected chip uses its category color (the board's blue #5B9DFF is not a token). Board's mic button is dropped (voice is OUT). Editable tile defaults ("Editar") = v1 gap, no milestone yet.
 - **Gamification rule:** rewards the habit of CLOSING the day, never amount spent and never number of records (a record-count reward would incentivize junk entries or spending). Streak = consecutive closed days; breaks when 3 consecutive days pass without a close. XP/levels exist but derive only from closed days.
 - **Export is a core feature**, not an afterthought: one tap, full metadata, built so an LLM can analyze it (Piero's stated use).
 - **Honest caveat (kept from the stress run):** capture cost > forgetting cost in the moment is the main abandonment risk; Piero declined a 7-day probe and prefers build-then-iterate. Success is measured by real use, not simulated.
@@ -62,7 +63,7 @@ Design reference (approved by Piero, "está perfecto"): Claude Design canvas "Pl
 ## Visual Direction (rule 11)
 | # | Source | What we take |
 |---|---|---|
-| 1 | Approved Claude Design canvas above (to ship as `docs/design-reference.html` export) | Layout, dark theme, tokens, component shapes, chart language |
+| 1 | Approved Claude Design canvas above (copied to `docs/design-reference/*.dc.html`, 2026-10-15) | Layout, dark theme, tokens, component shapes, chart language |
 
 **Frozen tokens:** bg #0D1117 · surface #151B25 · border #263041 · text #F3F6FA · muted #93A0B4 · green #2BF5A0 (on-green text #04140D) · expected fill rgba(90,130,110,0.38) + dashed #5E8C77 · amber #FFB224 · red #FF5D73 · gold #F7C948 · categories as in §4. Type: Sora (numbers/display) + Figtree (body). Touch targets ≥44 px. Base: custom CSS or Tailwind; no default shadcn styling needed.
 **VA-1:** at each UI milestone close, side-by-side screenshot vs the matching board; FAIL on generic drift (default shadows, Inter-everywhere, blue/gray palette creep). Log PASS/FAIL in docs/DECISIONS.md.

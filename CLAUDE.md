@@ -1,7 +1,7 @@
 # Platita 2 — CLAUDE.md
 
 ## Contexto
-PWA Android, local-first y gratis, para que Piero registre gastos hormiga con 1 toque, confirme ingresos esperados y cierre el día; flujo semanal (lun–dom) que sobra a Ahorro. Fuente de verdad: `docs/spec.md`. Estado: `docs/PROGRESO.md`. Decisiones: `docs/DECISIONS.md`. Diseño aprobado: `docs/design-reference.html` (exportar del lienzo de Claude Design).
+PWA Android, local-first y gratis, para que Piero registre gastos hormiga con 1 toque, confirme ingresos esperados y cierre el día; flujo semanal (lun–dom) que sobra a Ahorro. Fuente de verdad: `docs/spec.md`. Estado: `docs/PROGRESO.md`. Decisiones: `docs/DECISIONS.md`. Diseño aprobado: `docs/design-reference/*.dc.html` (5 tableros copiados del lienzo de Claude Design; estilos inline, se renderizan en un navegador normal).
 
 ## Router de sesión (obligatorio)
 - Al INICIO de cada sesión: lee `docs/PROGRESO.md` y `docs/DECISIONS.md`. Anuncia: nodo/milestone actual, gates pendientes, y propón el objetivo único de hoy con un plan de 5-8 pasos. Espera OK antes de tocar código.
@@ -25,7 +25,7 @@ PWA Android, local-first y gratis, para que Piero registre gastos hormiga con 1 
 - HITL: nunca crear repos públicos, borrar datos o publicar sin plan + OK explícito. Los datos financieros de Piero no salen del dispositivo: sin analytics ni scripts de terceros.
 
 ## Gate visual (milestones de UI)
-- Antes de cerrar un milestone de UI: con Playwright MCP, navega la vista (viewport 390×844), screenshot y compárala contra la pantalla equivalente de `docs/design-reference.html`. PASS/FAIL + una línea. Deriva genérica = FAIL (sombras default, Inter-everywhere, paleta azul/gris, targets <44px).
+- Antes de cerrar un milestone de UI: con Playwright MCP, navega la vista (viewport 390×844), screenshot y compárala contra la pantalla equivalente de `docs/design-reference/*.dc.html`. PASS/FAIL + una línea. Deriva genérica = FAIL (sombras default, Inter-everywhere, paleta azul/gris, targets <44px).
 - FAIL → no cierra; itera sobre los tokens congelados del spec. Registrar en `docs/DECISIONS.md` y marcar GV en `docs/PROGRESO.md`.
 
 ## Evals y CI

@@ -1,3 +1,4 @@
+import type { Opening } from '../domain/flow'
 import type { PlatitaDB, Setting } from './db'
 
 // Spec §4: Savings opens at S/230.84 (Piero, 2026-10-15 14:31 Lima).
@@ -28,6 +29,15 @@ export async function getOpeningBalanceCents(db: PlatitaDB): Promise<number> {
     throw new Error('openingBalanceCents missing or not integer cents')
   }
   return row.value
+}
+
+export async function getOpening(db: PlatitaDB): Promise<Opening> {
+  const balanceCents = await getOpeningBalanceCents(db)
+  const row = await db.settings.get('openingBalanceAt')
+  if (!row || typeof row.value !== 'string' || Number.isNaN(Date.parse(row.value))) {
+    throw new Error('openingBalanceAt missing or not an ISO instant')
+  }
+  return { balanceCents, at: row.value }
 }
 
 export async function getTimezone(db: PlatitaDB): Promise<string> {

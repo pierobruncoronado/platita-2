@@ -71,6 +71,23 @@ export function startOfCivilDay(date: CivilDate, tz: string): number {
   return t
 }
 
+export interface LocalDateTime extends CivilDate {
+  h: number
+  mi: number
+}
+
+export function localDateTimeOf(iso: string, tz: string): LocalDateTime {
+  const p = zonedParts(toMs(iso), tz)
+  return { y: p.y, m: p.m, d: p.d, h: p.h, mi: p.mi }
+}
+
+// Wall-clock time in tz → ISO instant (date/time chip; never the device zone).
+export function zonedLocalToIso(local: LocalDateTime, tz: string): string {
+  const guess = Date.UTC(local.y, local.m - 1, local.d, local.h, local.mi)
+  const first = guess - offsetMs(guess, tz)
+  return new Date(guess - offsetMs(first, tz)).toISOString()
+}
+
 export function addDays(date: CivilDate, days: number): CivilDate {
   const t = new Date(Date.UTC(date.y, date.m - 1, date.d) + days * MS_DAY)
   return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() }

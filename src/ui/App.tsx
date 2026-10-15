@@ -1,26 +1,36 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { db } from '../db/db'
-import { getOpeningBalanceCents, seedDefaults } from '../db/seed'
-import { formatSoles } from '../domain/money'
+import { setUndone } from '../db/movements'
+import { getOpening, getTimezone, seedDefaults } from '../db/seed'
+import type { Opening } from '../domain/flow'
+import { Capture } from './Capture'
+import { Home } from './Home'
+import { useRoute } from './hooks'
+import { UndoToast, type Toast, type ToastInput } from './UndoToast'
 
-type State =
-  | { kind: 'loading' }
-  | { kind: 'ready'; balanceCents: number }
-  | { kind: 'error' }
+let toastSeq = 0
+
+export interface AppSettings {
+  tz: string
+  opening: Opening
+}
+
+type State = { kind: 'loading' } | { kind: 'ready'; settings: AppSettings } | { kind: 'error' }
 
 export function App() {
   const [state, setState] = useState<State>({ kind: 'loading' })
+  const [toast, setToast] = useState<Toast | null>(null)
+  const route = useRoute()
 
   useEffect(() => {
     let cancelled = false
     ;(async () => {
       try {
         await seedDefaults(db)
-        // H1: no movements yet, so "En cuenta" equals the opening balance. H2 adds weekly_net.
-        const balanceCents = await getOpeningBalanceCents(db)
-        if (!cancelled) setState({ kind: 'ready', balanceCents })
+        const [tz, opening] = await Promise.all([getTimezone(db), getOpening(db)])
+        if (!cancelled) setState({ kind: 'ready', settings: { tz, opening } })
       } catch (err) {
-        console.error(JSON.stringify({ event: 'balance_load_failed', message: String(err) }))
+        console.error(JSON.stringify({ event: 'settings_load_failed', message: String(err) }))
         if (!cancelled) setState({ kind: 'error' })
       }
     })()
@@ -29,18 +39,37 @@ export function App() {
     }
   }, [])
 
+  const showUndo = useCallback((t: ToastInput) => setToast({ ...t, key: ++toastSeq }), [])
+  const dismiss = useCallback(() => setToast(null), [])
+
+  const undo = useCallback(async (t: Toast) => {
+    try {
+      await setUndone(db, t.movementId, true)
+      setToast(null)
+    } catch (err) {
+      console.error(JSON.stringify({ event: 'undo_failed', message: String(err) }))
+      // Keep the toast (fresh 5 s) so the failure is visible and can be retried.
+      setToast({ ...t, message: 'No se pudo deshacer. Intenta otra vez.', key: ++toastSeq })
+    }
+  }, [])
+
+  if (state.kind === 'loading') return <main className="screen" aria-busy="true" />
+  if (state.kind === 'error') {
+    return (
+      <main className="screen">
+        <p className="error">No se pudieron leer los datos guardados.</p>
+      </main>
+    )
+  }
+
   return (
-    <main className="screen">
-      <section className="balance-card" aria-live="polite">
-        <p className="label">En cuenta</p>
-        {state.kind === 'ready' && (
-          <p className="balance" data-testid="balance">
-            {formatSoles(state.balanceCents)}
-          </p>
-        )}
-        {state.kind === 'loading' && <p className="balance muted">…</p>}
-        {state.kind === 'error' && <p className="error">No se pudo leer el saldo guardado.</p>}
-      </section>
-    </main>
+    <>
+      {route.name === 'capture' ? (
+        <Capture key={route.id ?? 'new'} settings={state.settings} editId={route.id} onCreated={showUndo} />
+      ) : (
+        <Home settings={state.settings} onCreated={showUndo} />
+      )}
+      {toast && <UndoToast toast={toast} onUndo={undo} onDone={dismiss} />}
+    </>
   )
 }

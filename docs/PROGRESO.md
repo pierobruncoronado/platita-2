@@ -3,7 +3,7 @@ Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pr
 
 ## Estado actual
 Nodo: build · Milestone activo: H3 · Próximo gate: G1 (H1 y H2 cerrados 2026-10-15)
-Pendiente fuera de milestone: workflow de deploy a GitHub Pages (antes de H10). Falta `docs/design-reference.html` (bloquea GV desde H3).
+Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
 
 ## Milestones
 ### H1 — Scaffold PWA + Dexie + zona horaria + saldo inicial · cubre: AC-1 (base), eval 2
@@ -27,12 +27,15 @@ Evidencia:
 - G3: entrada "2026-10-15 — H2 money engine" en DECISIONS.md.
 
 ### H3 — Captura + botones rápidos + Deshacer · cubre: AC-1; evals 1, 9, 10
-- [ ] G1 Aceptación (tile = 1 toque; Deshacer 5 s; monto 0 deshabilitado)
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md
+- [ ] G1 Aceptación (tile = 1 toque; Deshacer 5 s; monto 0 deshabilitado) — PASA en Playwright; falta uso real en el Android de Piero
+- [x] G2 code-review — 10 hallazgos, 10 corregidos
+- [x] G3 DECISIONS.md
 - [ ] G4 commit + push ({hash})
-- [ ] GV Gate visual PASS vs tablero Captura/Inicio
+- [x] GV Gate visual PASS vs tablero Captura/Inicio
 Evidencia:
+- G1 (Playwright 390×844, device TZ New York): tap Pasaje → 1 expense {200, transporte, Pasaje, W42}, balance 230.84→228.84; Deshacer → undone=true, balance 230.84; toast gone at 5.3 s. Eval 9: Snack 700 with note "" → edit note "pan y empanada", amount stays 700. Eval 10: blank and "0" → Guardar disabled, 0 rows created. Back after save → Inicio. Pre-opening date rejected with message. Targets <44px: none. `npm test` 43 passed; evals 7 passed; lint/tsc ok.
+- G2: `/code-review medium` → fixes: pre-opening backdate, back-button history, visible undo failure, stable 5 s timer, no edits on undone, refresh period after tap, single toast counter, date parsing moved + tested, "+" on positive net, Pages deploy not cancelled mid-run.
+- GV: screenshots app vs `docs/design-reference/{Main,Captura}.dc.html` rendered in Chromium; see DECISIONS H3.
 
 ### H4 — Pantalla Ingresos (confirmados/esperados/recurrentes/parcial) · cubre: AC-3, AC-5
 - [ ] G1 Aceptación

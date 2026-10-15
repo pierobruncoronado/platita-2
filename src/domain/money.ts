@@ -10,3 +10,9 @@ export function formatSoles(cents: number): string {
   const rest = abs % 100
   return `${sign}S/${soles}.${String(rest).padStart(2, '0')}`
 }
+
+// Compact form for tiles and lists: "S/2", "S/7.50".
+export function formatSolesShort(cents: number): string {
+  const full = formatSoles(cents)
+  return full.endsWith('.00') ? full.slice(0, -3) : full
+}

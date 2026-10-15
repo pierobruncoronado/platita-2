@@ -1,6 +1,14 @@
 # DECISIONS — Platita 2
 Format per entry: **Qué / Por qué / Cómo / Trade-off / Gotcha**. Newest first.
 
+## 2026-10-15 — H3 Captura + quick tiles + Deshacer (+ Pages deploy)
+- **Qué:** Inicio with live "En cuenta", 5 quick tiles (1 tap = 1 expense, no confirmation), "Otro monto" → Captura, a "Hoy" list (tap = edit), 5 s Deshacer toast; Captura with keypad, category + optional detail chips, note, date/time chip, Guardar; hash routing; GitHub Actions workflow (lint + unit tests + build → Pages). Design boards copied to `docs/design-reference/`.
+- **Por qué:** spec H3 / AC1, evals 1, 9, 10. Piero's calls (2026-10-15): 5 categories with detail row only for Transporte (Pasaje, Taxi) and Comida (Snack, Menú); selected chip in its category color (board blue #5B9DFF is not a token); "Hoy" list as the place to edit later (no board had one); tile "Editar" = pending v1 gap. Deploy pulled into H3 because a UI milestone closes only on his Android.
+- **Cómo:** Undo = `undone: true`, never delete (export keeps it). Toast keys come from one counter in App; the timer only restarts on a new toast. Leaving a form uses `location.replace` so Android back doesn't reopen it. Date chip = native `datetime-local`, read as Lima wall-clock (`fromDateTimeInput`), bounded to [opening, now]; an earlier date is rejected with a message because it would never count. Edits refuse undone movements (repository + UI). Live data via `dexie-react-hooks`.
+- **Trade-off:** nav items Semana/Mes/Ingresos are shown disabled until H4–H6 (keeps the board layout, but they do nothing yet). The top card is a simple "En cuenta" + weekly net; the full "Libre esta semana" card is H5. Ingreso toggle hidden until H4.
+- **Gotcha:** RTK's bash heredoc handling broke a long inline script — write test scripts with the Write tool. Playwright `timezoneId: 'America/New_York'` confirmed the UI shows Lima time. Board neutrals #1C2430/#3A4659 are used as surface-2/dashed border (not in the frozen list, but they are the approved board's values).
+- **GV (VA-1):** PASS — Inicio tiles/header/nav and Captura match the boards (tokens, Sora/Figtree, no default shadows, no blue creep, all targets ≥44 px measured), with the agreed deviations above.
+
 ## 2026-10-15 — H2 money engine (pure functions)
 - **Qué:** `src/domain/time.ts` (ISO weeks in the configured IANA zone via Intl), `flow.ts` (`weeklyNet`, `closedWeeks`, `balanceAt`), `expected.ts` (recurring templates → instances, `expectedStatus`, `confirmExpected`, `ifExpectedArrives`). Evals 2–6 in `money.eval.test.ts`.
 - **Por qué:** spec H2 / AC2–AC5. Spec fix first: mesada window = Mon–Thu (eval 6 wins over "window = the week"; Piero, 2026-10-15).

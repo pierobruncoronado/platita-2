@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Platita 2 · Nuevo movimiento</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+</style>
+</helmet>
+<div style="position:relative;width:390px;height:844px;overflow:hidden;background:#0D1117;color:#F3F6FA;font-family:'Figtree',sans-serif;box-sizing:border-box">
+<div style="padding:16px 20px 0 20px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box">
+
+<div style="display:flex;justify-content:space-between;align-items:center;height:44px">
+<a href="Main.dc.html" aria-label="Cerrar" style="width:44px;height:44px;border-radius:22px;background:#1C2430;display:flex;align-items:center;justify-content:center;color:#93A0B4">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+<div style="display:flex;padding:3px;border-radius:999px;background:#1C2430">
+<span style="min-height:36px;padding:0 20px;border-radius:999px;background:#5B6B85;color:#F3F6FA;font-weight:700;font-size:13px;display:flex;align-items:center">Gasto</span>
+<a href="Ingresos.dc.html" style="min-height:36px;padding:0 20px;border-radius:999px;color:#93A0B4;font-weight:600;font-size:13px;display:flex;align-items:center">Ingreso</a>
+</div>
+<div style="width:44px"></div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 4px">
+<div style="font-family:'Sora',sans-serif;font-weight:800;font-size:64px;line-height:1">S/ 7</div>
+<button aria-label="Dictar monto" style="width:52px;height:52px;border-radius:26px;background:#1C2430;border:1px solid #263041;color:#93A0B4;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+</div>
+
+<div style="display:flex;gap:8px">
+<button style="min-height:44px;padding:0 16px;border-radius:999px;background:rgba(91,157,255,0.18);border:1.5px solid #5B9DFF;color:#5B9DFF;font-weight:700;font-size:14px;cursor:pointer">Comida</button>
+<button style="min-height:44px;padding:0 16px;border-radius:999px;background:#151B25;border:1px solid #263041;color:#93A0B4;font-weight:600;font-size:14px;cursor:pointer">Transporte</button>
+<button style="min-height:44px;padding:0 16px;border-radius:999px;background:#151B25;border:1px solid #263041;color:#93A0B4;font-weight:600;font-size:14px;cursor:pointer">Alcohol</button>
+<button style="min-height:44px;padding:0 16px;border-radius:999px;background:#151B25;border:1px solid #263041;color:#93A0B4;font-weight:600;font-size:14px;cursor:pointer">Otros</button>
+</div>
+
+<div style="display:flex;gap:8px">
+<button style="min-height:40px;padding:0 14px;border-radius:12px;background:#1C2430;border:1px solid #5B9DFF;color:#F3F6FA;font-weight:600;font-size:13px;cursor:pointer">Snack</button>
+<button style="min-height:40px;padding:0 14px;border-radius:12px;background:#1C2430;border:1px solid #263041;color:#93A0B4;font-weight:600;font-size:13px;cursor:pointer">Bebida</button>
+<button style="min-height:40px;padding:0 14px;border-radius:12px;background:#1C2430;border:1px solid #263041;color:#93A0B4;font-weight:600;font-size:13px;cursor:pointer">Menú</button>
+</div>
+
+<div style="display:flex;gap:10px">
+<div style="flex:1;min-height:44px;border-radius:14px;background:#151B25;border:1px solid #263041;display:flex;align-items:center;padding:0 14px;font-size:14px;color:#93A0B4;box-sizing:border-box">Nota (opcional)</div>
+<div style="min-height:44px;border-radius:14px;background:#151B25;border:1px solid #263041;display:flex;align-items:center;padding:0 14px;font-size:13px;font-weight:600;box-sizing:border-box">Hoy · 13:34</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">1</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">2</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">3</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">4</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">5</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">6</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">7</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">8</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">9</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">.</button>
+<button style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#F3F6FA;font-family:'Sora',sans-serif;font-weight:700;font-size:22px;cursor:pointer">0</button>
+<button aria-label="Borrar" style="min-height:56px;border-radius:16px;background:#151B25;border:1px solid #263041;color:#93A0B4;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11v12H9l-6-6z"/><path d="M13 10l4 4M17 10l-4 4"/></svg></button>
+</div>
+
+<a href="Main.dc.html" style="min-height:60px;border-radius:20px;background:#2BF5A0;color:#04140D;font-family:'Sora',sans-serif;font-weight:800;font-size:18px;display:flex;align-items:center;justify-content:center;box-sizing:border-box">Guardar</a>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
