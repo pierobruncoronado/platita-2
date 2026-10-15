@@ -2,18 +2,19 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H1 · Próximo gate: G1
+Nodo: build · Milestone activo: H2 · Próximo gate: G1 (H1 cerrado 2026-10-15)
+Pendiente fuera de milestone: workflow de deploy a GitHub Pages (antes de H10). Falta `docs/design-reference.html` (bloquea GV desde H3).
 
 ## Milestones
 ### H1 — Scaffold PWA + Dexie + zona horaria + saldo inicial · cubre: AC-1 (base), eval 2
 - [x] G1 Aceptación verificada: offline abre y muestra S/230.84 — PASA
 - [x] G2 code-review sin hallazgos críticos (self-review inline; 1 menor: icono maskable con esquinas transparentes)
 - [x] G3 DECISIONS.md actualizado
-- [ ] G4 .gitignore + commit + push — commit d1251f6 hecho; push pendiente (falta remoto + OK de Piero)
+- [x] G4 .gitignore + commit + push — d1251f6 (H1) … 4973952 pushed a origin/main (github.com/pierobruncoronado/platita-2, público)
 Evidencia:
 - G1: Playwright 390×844 sobre `vite preview`: SW controlling=true → servidor matado (reachable=false) → reload muestra `S/230.84`, fuentes Sora 700 + Figtree 400 cargadas desde caché. `npm run lint` → "No issues found"; `npm test` → 7/7 passed; `npm run build` → precache 19 entries.
 - G3: entrada "2026-10-15 — H1 scaffold" en DECISIONS.md.
-- G4: `git check-ignore` confirma node_modules, dist, .env, exports/ ignorados; commit d1251f6.
+- G4: `git check-ignore` confirma node_modules, dist, .env, exports/ ignorados; `git push -u origin main` → "[new branch] main -> main", origin/main = 4973952.
 
 ### H2 — Motor de dinero (funciones puras) · cubre: AC-2, AC-3, AC-4, AC-5; evals 2,3,4,5,6
 - [ ] G1 Unit tests verdes incl. caso de cambio de zona (eval 3) y cobro parcial (eval 4)
