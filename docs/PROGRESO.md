@@ -30,7 +30,7 @@ Evidencia:
 - [ ] G1 Aceptación (tile = 1 toque; Deshacer 5 s; monto 0 deshabilitado) — PASA en Playwright; falta uso real en el Android de Piero
 - [x] G2 code-review — 10 hallazgos, 10 corregidos
 - [x] G3 DECISIONS.md
-- [ ] G4 commit + push ({hash})
+- [x] G4 commit + push — 9655e5c pushed; Actions run 38815118270 build+deploy success; https://pierobruncoronado.github.io/platita-2/ verificado en contexto limpio (HTTP 200, S/230.84, manifest + iconos OK, SW controla, tap+Deshacer OK, recarga offline OK)
 - [x] GV Gate visual PASS vs tablero Captura/Inicio
 Evidencia:
 - G1 (Playwright 390×844, device TZ New York): tap Pasaje → 1 expense {200, transporte, Pasaje, W42}, balance 230.84→228.84; Deshacer → undone=true, balance 230.84; toast gone at 5.3 s. Eval 9: Snack 700 with note "" → edit note "pan y empanada", amount stays 700. Eval 10: blank and "0" → Guardar disabled, 0 rows created. Back after save → Inicio. Pre-opening date rejected with message. Targets <44px: none. `npm test` 43 passed; evals 7 passed; lint/tsc ok.
