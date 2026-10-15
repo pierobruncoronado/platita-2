@@ -35,6 +35,14 @@ describe('movements repository', () => {
     expect(await db.movements.get(m.id)).toMatchObject({ undone: true })
   })
 
+  it('delete then Deshacer restores the movement (undone false again)', async () => {
+    const db = freshDb()
+    const m = await createExpense(db, pasaje, NOW, TZ)
+    await setUndone(db, m.id, true)
+    await setUndone(db, m.id, false)
+    expect(await db.movements.get(m.id)).toMatchObject({ undone: false, amountCents: 200 })
+  })
+
   it('editing the note keeps the amount (eval 9 data path)', async () => {
     const db = freshDb()
     const snack = await createExpense(db, { ...pasaje, amountCents: 700, category: 'comida', subtype: 'Snack' }, NOW, TZ)

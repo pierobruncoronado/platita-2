@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { db } from '../db/db'
-import { createExpense, updateExpense } from '../db/movements'
+import { createExpense, setUndone, updateExpense } from '../db/movements'
 import { centsToInput, parseAmountCents, pressKey, type KeypadKey } from '../domain/amount'
 import { CATEGORIES, categoryById, type CategoryId } from '../domain/catalog'
 import { fromDateTimeInput, toDateTimeInput, whenLabel } from '../domain/labels'
@@ -29,6 +29,7 @@ export function Capture({ settings, editId, onCreated }: Props) {
   const [loaded, setLoaded] = useState(editId === null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [amountFresh, setAmountFresh] = useState(false) // edit mode: loaded amount not touched yet
   const dateInput = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export function Capture({ settings, editId, onCreated }: Props) {
           return
         }
         setAmount(centsToInput(m.amountCents))
+        setAmountFresh(true)
         setCategory(categoryById(m.category)?.id ?? null)
         setSubtype(m.subtype)
         setNote(m.note)
@@ -90,7 +92,7 @@ export function Capture({ settings, editId, onCreated }: Props) {
       } else {
         const m = await createExpense(db, input, at, tz)
         const label = subtype ?? selected.label
-        onCreated({ movementId: m.id, message: `${label} ${formatSolesShort(amountCents)} anotado` })
+        onCreated({ movementId: m.id, message: `${label} ${formatSolesShort(amountCents)} anotado`, undoTo: true })
       }
       replaceRoute({ name: 'home' })
     } catch (err) {
@@ -98,6 +100,31 @@ export function Capture({ settings, editId, onCreated }: Props) {
       setError('No se pudo guardar. Intenta otra vez.')
       setSaving(false)
     }
+  }
+
+  // Delete = undone flag (kept for export), reversible from the toast.
+  async function remove() {
+    if (!editId || saving) return
+    setSaving(true)
+    setError(null)
+    try {
+      await setUndone(db, editId, true)
+      const label = subtype ?? selected?.label ?? 'Gasto'
+      onCreated({ movementId: editId, message: `${label} eliminado`, undoTo: false })
+      replaceRoute({ name: 'home' })
+    } catch (err) {
+      console.error(JSON.stringify({ event: 'expense_delete_failed', message: String(err) }))
+      setError('No se pudo eliminar. Intenta otra vez.')
+      setSaving(false)
+    }
+  }
+
+  function tapKey(k: KeypadKey) {
+    // Close the Android keyboard if the note had focus, so it can't cover the keypad.
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
+    // In edit mode the loaded amount is "selected": the first key replaces it.
+    setAmount((a) => pressKey(amountFresh ? '' : a, k))
+    setAmountFresh(false)
   }
 
   return (
@@ -110,9 +137,14 @@ export function Capture({ settings, editId, onCreated }: Props) {
         <span className="icon-spacer" aria-hidden="true" />
       </header>
 
-      <p className={`amount ${amount === '' ? 'amount-empty' : ''}`} aria-live="polite" data-testid="amount">
-        S/ {amount === '' ? '0' : amount}
+      <p
+        className={`amount ${amount === '' ? 'amount-empty' : ''} ${amountFresh ? 'amount-fresh' : ''}`}
+        aria-live="polite"
+        data-testid="amount"
+      >
+        S/ <span className="amount-value">{amount === '' ? '0' : amount}</span>
       </p>
+      {amountFresh && <p className="muted small hint">Teclea para cambiar el monto</p>}
 
       <div className="chips" role="radiogroup" aria-label="Categoría">
         {CATEGORIES.map((c) => {
@@ -199,7 +231,7 @@ export function Capture({ settings, editId, onCreated }: Props) {
             type="button"
             className="key"
             aria-label={k === 'back' ? 'Borrar' : k === '.' ? 'Punto decimal' : k}
-            onClick={() => setAmount((a) => pressKey(a, k))}
+            onClick={() => tapKey(k)}
           >
             {k === 'back' ? <Icon name="back" /> : k}
           </button>
@@ -211,6 +243,12 @@ export function Capture({ settings, editId, onCreated }: Props) {
       <button type="button" className="save" disabled={!canSave} onClick={save}>
         Guardar
       </button>
+
+      {editId && loaded && (
+        <button type="button" className="delete" disabled={saving} onClick={remove}>
+          Eliminar gasto
+        </button>
+      )}
     </main>
   )
 }

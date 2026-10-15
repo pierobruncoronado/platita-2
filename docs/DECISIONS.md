@@ -1,6 +1,13 @@
 # DECISIONS — Platita 2
 Format per entry: **Qué / Por qué / Cómo / Trade-off / Gotcha**. Newest first.
 
+## 2026-10-15 — H3 real-use fix: edit amount + delete
+- **Qué:** On his Android, Piero could not delete an expense once the 5 s toast was gone, and could not change the amount when editing.
+- **Por qué:** no delete path existed after the toast; amount editing worked in emulation (412×730, keypad visible) but was not discoverable — typing appended to the loaded value and the note's soft keyboard could cover the keypad.
+- **Cómo:** edit mode shows the loaded amount "selected" (tint + hint "Teclea para cambiar el monto") and the first key replaces it; any keypad tap blurs the note (closes the Android keyboard); "Eliminar gasto" sets `undone: true` and shows the same toast with Deshacer (`undoTo: false` restores). Delete button is muted, not red (red/amber = status vs limit only).
+- **Trade-off:** no confirm dialog — the 5 s Deshacer is the safety net, consistent with tile capture.
+- **Gotcha:** emulator green ≠ real use: the exact failure wasn't reproducible, so the fix targets both plausible causes; Piero must re-test on the phone.
+
 ## 2026-10-15 — H3 Captura + quick tiles + Deshacer (+ Pages deploy)
 - **Qué:** Inicio with live "En cuenta", 5 quick tiles (1 tap = 1 expense, no confirmation), "Otro monto" → Captura, a "Hoy" list (tap = edit), 5 s Deshacer toast; Captura with keypad, category + optional detail chips, note, date/time chip, Guardar; hash routing; GitHub Actions workflow (lint + unit tests + build → Pages). Design boards copied to `docs/design-reference/`.
 - **Por qué:** spec H3 / AC1, evals 1, 9, 10. Piero's calls (2026-10-15): 5 categories with detail row only for Transporte (Pasaje, Taxi) and Comida (Snack, Menú); selected chip in its category color (board blue #5B9DFF is not a token); "Hoy" list as the place to edit later (no board had one); tile "Editar" = pending v1 gap. Deploy pulled into H3 because a UI milestone closes only on his Android.

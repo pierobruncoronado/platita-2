@@ -10,7 +10,7 @@ Design reference (approved by Piero, "está perfecto"): Claude Design canvas "Pl
 ## 2. Scope / Out of scope
 **In (v1):**
 - Quick-expense tiles (Pasaje S/2, Bebida S/3, Snack S/7, Taxi S/10, Alcohol S/25, Otro monto); amounts are editable defaults, not fixed values.
-- Manual entry screen (numeric keypad, category + subtype chips, note, date/time chip, Guardar) with Undo.
+- Manual entry screen (numeric keypad, category + subtype chips, note, date/time chip, Guardar) with Undo. Editing a movement allows changing every field and "Eliminar gasto" (sets the undone flag, reversible from the toast) — Piero, 2026-10-15 real-use finding.
 - Income: free-form sources/amounts; recurring templates with expected windows; "Esperado" items confirmed with one tap (partial confirmation supported).
 - Weekly view (Mon 00:00–Sun 23:59, user timezone): hormiga donut by category, per-day stacked bars, expected-income card, Sunday close → Savings.
 - Monthly view: income vs expenses, category donut, per-week bars, "te quedó", baseline-measurement card.

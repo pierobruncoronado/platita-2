@@ -5,6 +5,7 @@ export const UNDO_MS = 5000 // spec AC1
 export interface Toast {
   movementId: string
   message: string
+  undoTo: boolean // value of `undone` that Deshacer restores: true after a create, false after a delete
   key: number // restarts the timer when a new toast replaces this one
 }
 

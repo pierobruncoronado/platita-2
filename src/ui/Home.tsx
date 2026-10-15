@@ -31,7 +31,7 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
       navigator.vibrate?.(15)
       refreshNow()
       setFailed(false)
-      onCreated({ movementId: m.id, message: `${tile.label} ${formatSolesShort(tile.amountCents)} anotado`})
+      onCreated({ movementId: m.id, message: `${tile.label} ${formatSolesShort(tile.amountCents)} anotado`, undoTo: true })
     } catch (err) {
       console.error(JSON.stringify({ event: 'tile_create_failed', tile: tile.id, message: String(err) }))
       setFailed(true)

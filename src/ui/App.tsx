@@ -44,7 +44,7 @@ export function App() {
 
   const undo = useCallback(async (t: Toast) => {
     try {
-      await setUndone(db, t.movementId, true)
+      await setUndone(db, t.movementId, t.undoTo)
       setToast(null)
     } catch (err) {
       console.error(JSON.stringify({ event: 'undo_failed', message: String(err) }))
