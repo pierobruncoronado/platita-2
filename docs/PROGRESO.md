@@ -2,7 +2,9 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H4 · Próximo gate: G1 (H1, H2, H3 cerrados 2026-10-15)
+Nodo: build · Milestone activo: H5 (orden pendiente de decisión de Piero) · Próximo gate: G1 (H1–H4 cerrados 2026-10-15)
+Saldo real en el teléfono de Piero al cierre de H4: S/380.84 (230.84 + mesada 100 + Claude 50).
+Propuestas abiertas (esperan OK de Piero): (a) aviso "Hay versión nueva · Actualizar" — hoy la PWA toma la versión nueva recién al 2º arranque y Piero tuvo problemas para actualizar; (b) adelantar H9 (export) antes de H5 — hay datos reales sin copia fuera del teléfono.
 Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
 
 ## Milestones
@@ -38,7 +40,7 @@ Evidencia:
 - GV: screenshots app vs `docs/design-reference/{Main,Captura}.dc.html` rendered in Chromium; see DECISIONS H3.
 
 ### H4 — Pantalla Ingresos (confirmados/esperados/recurrentes/parcial) · cubre: AC-3, AC-5
-- [ ] G1 Aceptación — PASA en Playwright y evals; falta que Piero confirme sus S/150 reales en su Android
+- [x] G1 Aceptación — PASA en Playwright y evals, y en el Android de Piero (2026-10-15: confirmó Mesada S/100 + Claude S/50 reales → "ya figuran 380")
 - [x] G2 code-review — 9 hallazgos: 8 corregidos, 1 declinado con razón (DECISIONS H4)
 - [x] G3 DECISIONS.md
 - [x] G4 commit + push — 33e736d pushed; Actions run 38850661227 success; bundle público contiene "Ingreso suelto", "Te deben", "Si llega lo esperado", "Eliminar ingreso"
