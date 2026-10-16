@@ -931,10 +931,6 @@ a {
   align-items: center;
 }
 
-.seg:disabled {
-  opacity: 0.45;
-}
-
 .seg-on {
   background: var(--green);
   color: var(--on-green);
@@ -1148,4 +1144,73 @@ a {
 .sunday-note {
   font-size: 12px;
   color: #c9b77a;
+}
+
+/* ---------- Mes ---------- */
+.quedo-amount {
+  font-size: 48px;
+  color: var(--gold);
+}
+
+.quedo-note {
+  margin: 0;
+  font-size: 12px;
+  color: #c9b77a;
+}
+
+.weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.week-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.week-label {
+  width: 44px;
+  flex: none;
+}
+
+.week-tracks {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.track {
+  height: 8px;
+  border-radius: 4px;
+  min-width: 4px;
+}
+
+.track-in {
+  background: var(--green);
+}
+
+.week-legend-left {
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.base-segs {
+  display: flex;
+  gap: 6px;
+}
+
+.base-segs span {
+  flex: 1;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface-2);
+}
+
+.base-segs span.on {
+  background: var(--gold);
 }

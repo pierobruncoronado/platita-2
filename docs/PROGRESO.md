@@ -2,7 +2,7 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H5 (implementado, falta push + uso real en el Android) → luego H6, H7, H8, H10 · Pendientes en el Android de Piero: H9 G1 (ver 2 archivos en Descargas) y H5 G1 (H1–H4 cerrados 2026-10-15)
+Nodo: build · Milestone activo: H6 (implementado, falta push + uso real en el Android) → luego H7, H8, H10 · Pendientes en el Android de Piero: H9 G1 (2 archivos en Descargas), H5 G1 (Inicio/Semana) y H6 G1 (Mes) (H1–H4 cerrados 2026-10-15)
 Saldo real en el teléfono de Piero al cierre de H4: S/380.84 (230.84 + mesada 100 + Claude 50).
 Orden aprobado por Piero (2026-10-16): aviso de versión nueva (hecho, 78617a3) → H9 → H5 → H6 → H7 → H8 → H10.
 Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
@@ -58,12 +58,13 @@ Evidencia:
 - G1: `npm test` 59 passed; `npm run test:evals` 24 passed (3 evals H5 en lenguaje real: Libre ámbar/verde, Claude fuera de hormigas, proyección del domingo = cierre real); tsc/lint/build ok. Playwright 390×844 (jueves 22 oct 17:30 Lima, dispositivo NY): semana con gastos (1 deshecho y 1 de la semana pasada ignorados) → Libre −S/115 ámbar rgb(255,178,36), En cuenta S/115.84, hormigas S/28, días 9·5·9·5·–·–·–, Jue resaltado; con ingreso S/200 → Libre S/85 verde; semana vacía → S/0 verde; 0 errores de consola; 0 targets <44px. Flujo: Captura Otros → Claude 87 → Libre −S/87, dona S/0 + "Claude S/87 va aparte".
 
 ### H6 — Mes + tarjeta línea base · cubre: vista mensual
-- [ ] G1 Aceptación
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md
+- [ ] G1 Aceptación — PASA en Playwright y evals; falta usarla en el Android de Piero
+- [x] G2 code-review — 7 hallazgos: 4 corregidos, 3 declinados con razón (DECISIONS H6)
+- [x] G3 DECISIONS.md
 - [ ] G4 commit + push ({hash})
-- [ ] GV vs tablero Mes
+- [x] GV vs tablero Mes — PASS
 Evidencia:
+- G1: `npm test` 67 passed; `npm run test:evals` 28 passed (4 evals H6 en lenguaje real: Te quedó = lo que los cierres dominicales mandaron a Ahorro, semana en curso visible el 28 oct, línea base 1→3→4 semanas sin Claude ni tope); tsc/lint/build ok. Playwright 390×844 (miércoles 28 oct 17:30 Lima, dispositivo NY): Te quedó −S/24 (S/100 entró · S/124 salió), dona S/124 con Claude S/87 aparte, filas 12/19/26 oct, 1 barra Esperado, línea base "1 de 4", toggle Semana⇄Mes y nav Mes OK, 0 targets <44px, 0 errores de consola; mes vacío → S/0.
 
 ### H7 — Cierre del día + racha + XP · cubre: AC-6; eval 7
 - [ ] G1 Aceptación (racha viva con 2 días sin cerrar, se rompe con 3)

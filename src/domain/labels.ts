@@ -22,6 +22,25 @@ function hhmm(h: number, mi: number): string {
   return `${String(h).padStart(2, '0')}:${String(mi).padStart(2, '0')}`
 }
 
+const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+
+// "Octubre 2026"
+export function monthTitle(now: string, tz: string): string {
+  const d = civilDateOf(toMs(now), tz)
+  return `${MONTH_NAMES[d.m - 1]} ${d.y}`
+}
+
+// "Hasta hoy, jueves 15"
+export function untilToday(now: string, tz: string): string {
+  const d = civilDateOf(toMs(now), tz)
+  return `Hasta hoy, ${WEEKDAYS[isoWeekday(d)].toLowerCase()} ${d.d}`
+}
+
+// "28 sep"
+export function shortDate(d: CivilDate): string {
+  return `${d.d} ${MONTHS[d.m - 1]}`
+}
+
 // "Jueves 15 oct"
 export function dayHeader(now: string, tz: string): string {
   const d = civilDateOf(toMs(now), tz)

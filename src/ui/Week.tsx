@@ -4,12 +4,12 @@ import { formatSolesShort } from '../domain/money'
 import { weekdayIndex } from '../domain/week'
 import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
+import { Donut } from './Donut'
 import { useNow } from './hooks'
+import { PeriodToggle } from './PeriodToggle'
 import { useWeekView } from './useWeekView'
 
 const DAY_LABELS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
-const DONUT_R = 52
-const DONUT_C = 2 * Math.PI * DONUT_R
 const BAR_MAX_PX = 84
 // Exact soles without "S/" (2.5, not 3): the bars must agree with the donut and the legend.
 const sol = (cents: number) => String(Number((cents / 100).toFixed(2)))
@@ -27,14 +27,7 @@ export function Week({ settings }: { settings: AppSettings }) {
           <p className="muted small">Semana calendario · lun–dom</p>
           <h1 className="title">{weekHeader(now, tz).replace('Semana ', '')}</h1>
         </div>
-        <div className="seg-toggle" role="group" aria-label="Periodo">
-          <span className="seg seg-on" aria-current="true">
-            Semana
-          </span>
-          <button type="button" className="seg" disabled aria-label="Mes (próximamente)">
-            Mes
-          </button>
-        </div>
+        <PeriodToggle active="week" />
       </header>
 
       {!view ? (
@@ -75,7 +68,6 @@ function formula(owedCents: number, netCents: number): string {
 type View = NonNullable<ReturnType<typeof useWeekView>>
 
 function DonutCard({ spend }: { spend: View['spend'] }) {
-  let offset = 0
   const legend = CATEGORIES.filter((c) => c.id !== 'otros' || spend.byCategory.otros > 0)
   return (
     <section className="card stack" aria-labelledby="donut-title">
@@ -83,38 +75,12 @@ function DonutCard({ spend }: { spend: View['spend'] }) {
         ¿En qué se fue?
       </h2>
       <div className="donut-row">
-        <div className="donut">
-          <svg width="132" height="132" viewBox="0 0 132 132" aria-hidden="true">
-            <circle cx="66" cy="66" r={DONUT_R} fill="none" stroke="var(--surface-2)" strokeWidth="16" />
-            {spend.hormigasCents > 0 &&
-              CATEGORIES.map((c) => {
-                const len = (spend.byCategory[c.id] / spend.hormigasCents) * DONUT_C
-                if (len === 0) return null
-                const arc = (
-                  <circle
-                    key={c.id}
-                    cx="66"
-                    cy="66"
-                    r={DONUT_R}
-                    fill="none"
-                    stroke={c.color}
-                    strokeWidth="16"
-                    strokeDasharray={`${len} ${DONUT_C}`}
-                    strokeDashoffset={-offset}
-                    transform="rotate(-90 66 66)"
-                  />
-                )
-                offset += len
-                return arc
-              })}
-          </svg>
-          <div className="donut-center">
-            <span className="donut-total" data-testid="hormigas-total">
-              {formatSolesShort(spend.hormigasCents)}
-            </span>
-            <span className="muted donut-cap">hormigas</span>
-          </div>
-        </div>
+        <Donut
+          slices={CATEGORIES.map((c) => ({ id: c.id, color: c.color, cents: spend.byCategory[c.id] }))}
+          totalLabel={formatSolesShort(spend.hormigasCents)}
+          caption="hormigas"
+          testId="hormigas-total"
+        />
         <ul className="legend">
           {legend.map((c) => (
             <li key={c.id} className={spend.byCategory[c.id] === 0 ? 'muted' : ''}>

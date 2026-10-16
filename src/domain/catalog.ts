@@ -11,6 +11,9 @@ export interface Category {
   subtypes: string[] // optional detail row; empty = no second row
 }
 
+// Claude's slice in the monthly donut and the "Salió" tone (spec §4 colors; the board's #AEB8C8).
+export const CLAUDE_COLOR = '#AEB8C8'
+
 // Detail of Otros that marks Claude's monthly charge; Semana keeps it out of the hormigas charts.
 export const CLAUDE_SUBTYPE = 'Claude'
 
