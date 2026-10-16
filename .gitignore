@@ -13,6 +13,7 @@ coverage/
 exports/
 *.export.json
 platita-export*.json
+platita-export*.csv
 platita-backup*.json
 
 # tooling / OS

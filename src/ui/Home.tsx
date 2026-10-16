@@ -9,6 +9,7 @@ import { dayHeader, isSameLocalDay, timeLabel, weekHeader } from '../domain/labe
 import { formatSoles, formatSolesShort } from '../domain/money'
 import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
+import { ExportCard } from './ExportCard'
 import { shortLabel } from './expectedText'
 import { navigate, useNow } from './hooks'
 import { Icon } from './icons'
@@ -123,6 +124,8 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
         </section>
       )}
 
+      <ExportCard settings={settings} now={now} reminder />
+
       <section className="section" aria-labelledby="today-title">
         <h2 id="today-title" className="section-title">
           Hoy
@@ -162,6 +165,8 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
           </ul>
         )}
       </section>
+
+      <ExportCard settings={settings} now={now} />
 
       <BottomNav active="home" />
     </main>

@@ -65,6 +65,16 @@ export async function getOpening(db: PlatitaDB): Promise<Opening> {
   return { balanceCents, at: row.value }
 }
 
+export async function getLastExportAt(db: PlatitaDB): Promise<string | null> {
+  const row = await db.settings.get('lastExportAt')
+  return row && typeof row.value === 'string' ? row.value : null
+}
+
+export async function setLastExportAt(db: PlatitaDB, at: string): Promise<void> {
+  if (Number.isNaN(Date.parse(at))) throw new Error('lastExportAt must be an ISO instant')
+  await db.settings.put({ key: 'lastExportAt', value: at })
+}
+
 export async function getTimezone(db: PlatitaDB): Promise<string> {
   const row = await db.settings.get('timezone')
   if (!row || typeof row.value !== 'string') {

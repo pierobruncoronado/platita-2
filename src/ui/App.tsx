@@ -56,12 +56,23 @@ export function App() {
     }
   }, [])
 
-  if (state.kind === 'loading') return <main className="screen" aria-busy="true" />
+  // UpdateBanner is rendered in every state: a broken deploy must still be able to offer its fix.
+  if (state.kind === 'loading') {
+    return (
+      <>
+        <UpdateBanner />
+        <main className="screen" aria-busy="true" />
+      </>
+    )
+  }
   if (state.kind === 'error') {
     return (
-      <main className="screen">
-        <p className="error">No se pudieron leer los datos guardados.</p>
-      </main>
+      <>
+        <UpdateBanner />
+        <main className="screen">
+          <p className="error">No se pudieron leer los datos guardados.</p>
+        </main>
+      </>
     )
   }
 

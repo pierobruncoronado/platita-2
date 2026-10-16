@@ -20,7 +20,7 @@ export interface Movement {
   undone: boolean
 }
 
-export type SettingKey = 'timezone' | 'openingBalanceCents' | 'openingBalanceAt'
+export type SettingKey = 'timezone' | 'openingBalanceCents' | 'openingBalanceAt' | 'lastExportAt'
 
 export interface Setting {
   key: SettingKey

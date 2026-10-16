@@ -1,6 +1,7 @@
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
 const CHECK_EVERY_MS = 60 * 60 * 1000
+let checksInstalled = false // registration callbacks can run more than once (StrictMode, remounts)
 
 // A new deploy never reloads the app by itself (it could wipe an entry being typed):
 // the waiting service worker is announced here and applied on tap.
@@ -10,7 +11,8 @@ export function UpdateBanner() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(_url, registration) {
-      if (!registration) return
+      if (!registration || checksInstalled) return
+      checksInstalled = true
       const check = () => {
         if (navigator.onLine) registration.update().catch(() => {}) // offline or server down: try later
       }

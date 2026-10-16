@@ -2,9 +2,9 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H5 (orden pendiente de decisión de Piero) · Próximo gate: G1 (H1–H4 cerrados 2026-10-15)
+Nodo: build · Milestone activo: H9 (adelantado) → luego H5, H6, H7, H8, H10 · Próximo gate: H9 G1 en el Android de Piero (H1–H4 cerrados 2026-10-15)
 Saldo real en el teléfono de Piero al cierre de H4: S/380.84 (230.84 + mesada 100 + Claude 50).
-Propuestas abiertas (esperan OK de Piero): (a) aviso "Hay versión nueva · Actualizar" — hoy la PWA toma la versión nueva recién al 2º arranque y Piero tuvo problemas para actualizar; (b) adelantar H9 (export) antes de H5 — hay datos reales sin copia fuera del teléfono.
+Orden aprobado por Piero (2026-10-16): aviso de versión nueva (hecho, 78617a3) → H9 → H5 → H6 → H7 → H8 → H10.
 Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
 
 ## Milestones
@@ -79,12 +79,13 @@ Evidencia:
 - [ ] G4 commit + push ({hash})
 Evidencia:
 
-### H9 — Exportar todo (CSV + JSON) + recordatorio semanal · cubre: AC-7; eval 8
-- [ ] G1 Aceptación (contenido verificado campo por campo)
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md
+### H9 — Exportar todo (CSV + JSON) + recordatorio semanal · cubre: AC-7; eval 8 · (adelantado antes de H5, OK de Piero 2026-10-16)
+- [ ] G1 Aceptación (contenido verificado campo por campo) — PASA en evals + Playwright; falta exportar en el Android de Piero y ver los 2 archivos en Descargas
+- [x] G2 code-review — 10 hallazgos: 9 corregidos, 1 mitigado (descarga múltiple bloqueada no detectable)
+- [x] G3 DECISIONS.md
 - [ ] G4 commit + push ({hash})
 Evidencia:
+- G1: `npm run test:evals` 21 passed (eval 8: 3 gastos con 1 deshecho + ingreso parcial → JSON con los 4 registros, flags undone/status, todos los campos AC7, timezone + saldo inicial, filas "expected" por cobrar, CSV con mismas filas + comillas/saltos de línea + anti-fórmulas). Playwright: tap Exportar todo → descargas `platita-export-2026-10-16.json` y `.csv` (BOM, 16 columnas, 3 movimientos + 2 por cobrar), recordatorio desaparece, tarjeta "Último respaldo: hoy". `npm test` 50 passed; lint/tsc ok.
 
 ### H10 — Instalación en el Android de Piero + 1 semana de uso real
 - [ ] G1 Instalada desde Chrome y funciona sin internet (evidencia: Piero confirma)

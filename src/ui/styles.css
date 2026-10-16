@@ -418,6 +418,63 @@ a {
   font-weight: 700;
 }
 
+/* ---------- Export ---------- */
+.export-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+}
+
+.export-card .row-title,
+.export-card p {
+  margin: 0;
+}
+
+.export-btn {
+  min-height: 48px;
+  border-radius: 14px;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.btn-outline {
+  min-height: 48px;
+  border-radius: 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.btn-outline:active {
+  background: var(--surface-2);
+}
+
+.reminder-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.reminder-card .row-sub {
+  white-space: normal;
+}
+
+.reminder-msg {
+  flex-basis: 100%;
+  color: var(--muted);
+}
+
 /* ---------- Update banner ---------- */
 .update-banner {
   position: sticky;

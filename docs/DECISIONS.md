@@ -1,11 +1,19 @@
 # DECISIONS — Platita 2
 Format per entry: **Qué / Por qué / Cómo / Trade-off / Gotcha**. Newest first.
 
+## 2026-10-16 — H9 Exportar todo (moved ahead of H5) + weekly reminder
+- **Qué:** one tap → `platita-export-YYYY-MM-DD.json` + `.csv` to Downloads; optional "Compartir" (Web Share with files) to Drive/WhatsApp/an LLM app; weekly reminder card on Inicio ("Respalda tus datos · Último respaldo: …") when never exported or ≥7 calendar days (Lima). The board's "Exportar todo para tu LLM" card lives at the bottom of Inicio until H6 builds Mes.
+- **Por qué:** spec AC7 / eval 8; Piero approved doing H9 before H5 because his real data (S/380.84) existed only on the phone.
+- **Cómo:** pure `buildExport()` in `domain/export.ts`. JSON: schema_version, timezone, opening balance, current week numbers, closed weeks, recurring templates, notes for the LLM, every movement (incl. undone and pre-opening, flagged) and `expected` rows (status "expected", amount = remaining) — expected money is derived, so it is exported explicitly. `week_id` is recomputed from occurredAt + tz (engine's truth). CSV: same columns, UTF-8 BOM (tildes in spreadsheets), RFC-style quoting, text cells starting with = + - @ prefixed with `'` (formula injection). `lastExportAt` stored in settings.
+- **Trade-off:** the browser gives no signal if Chrome blocks the second download, so the success message tells Piero to check both files and accept "multiple downloads" if asked (review finding, mitigated not solved). No push notification (no server) — the reminder only shows when the app is opened.
+- **Gotcha:** `﻿` typed into a source string was saved as a literal invisible BOM (eslint `no-irregular-whitespace`), and a sed fix ate the backslash → use `String.fromCharCode(0xfeff)`. Day counts are calendar days in Lima and clamp a few-seconds-ahead export to "hoy"; an export dated >1 day in the future (wrong phone clock) makes the reminder due again.
+
 ## 2026-10-16 — Update banner instead of silent auto-update
 - **Qué:** `registerType: 'prompt'` + `UpdateBanner` ("Hay una versión nueva · Actualizar"); the app checks for a new SW when it becomes visible and every hour.
 - **Por qué:** Piero thought the app "doesn't update" (that time the deploy simply wasn't pushed yet), and auto-update needed 2 launches with no feedback; an auto-reload could also wipe an entry being typed.
 - **Cómo:** `useRegisterSW` from `virtual:pwa-register/react`; tap → `updateServiceWorker()` (skip waiting → reload). Playwright: SW controlling → server sw.js changed → banner appears while an unsaved "S/ 7" stays on screen → Actualizar → reload, no waiting SW left.
 - **Trade-off:** updates are applied only when Piero taps (he may postpone).
+- **Review fix (H9 review):** the banner renders in loading/error states too (a broken deploy must still offer its fix) and its periodic checks are installed once.
 - **Gotcha:** one-time transition: the installed auto-update SW does not message the new waiting SW, so the first prompt-mode version activates after a full close/reopen; from then on the banner appears. "Pushed ≠ updated": check the live bundle before telling Piero to reopen.
 
 ## 2026-10-15 — H4 Ingresos: confirmed / expected / recurring / ingreso suelto
