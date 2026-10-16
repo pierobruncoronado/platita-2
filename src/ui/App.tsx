@@ -5,6 +5,8 @@ import { getOpening, getTimezone, seedDefaults } from '../db/seed'
 import type { Opening } from '../domain/flow'
 import { Capture } from './Capture'
 import { Home } from './Home'
+import { IncomeForm } from './IncomeForm'
+import { Incomes } from './Incomes'
 import { useRoute } from './hooks'
 import { UndoToast, type Toast, type ToastInput } from './UndoToast'
 
@@ -64,11 +66,20 @@ export function App() {
 
   return (
     <>
-      {route.name === 'capture' ? (
+      {route.name === 'capture' && (
         <Capture key={route.id ?? 'new'} settings={state.settings} editId={route.id} onCreated={showUndo} />
-      ) : (
-        <Home settings={state.settings} onCreated={showUndo} />
       )}
+      {route.name === 'income' && (
+        <IncomeForm
+          key={route.expectedId ?? route.id ?? 'new'}
+          settings={state.settings}
+          editId={route.id}
+          expectedId={route.expectedId}
+          onCreated={showUndo}
+        />
+      )}
+      {route.name === 'incomes' && <Incomes settings={state.settings} />}
+      {route.name === 'home' && <Home settings={state.settings} onCreated={showUndo} />}
       {toast && <UndoToast toast={toast} onUndo={undo} onDone={dismiss} />}
     </>
   )

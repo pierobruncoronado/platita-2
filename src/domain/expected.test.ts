@@ -7,6 +7,8 @@ describe('generateExpected', () => {
     const abuelo: RecurringTemplate = {
       id: 'abuelo',
       label: 'Abuelo',
+      shortLabel: 'Abuelo',
+      windowLabel: 'test',
       amountCents: 8000,
       cadence: { kind: 'biweekly', anchorWeekId: '2026-W43', windowDays: 7 },
       activeFrom: OPENING_AT,
@@ -19,6 +21,8 @@ describe('generateExpected', () => {
     const t: RecurringTemplate = {
       id: 'mesada-papa',
       label: 'Mesada papá',
+      shortLabel: 'Mesada papá',
+      windowLabel: 'test',
       amountCents: 10000,
       cadence: { kind: 'weekly', windowDays: 4 },
       activeFrom: OPENING_AT,
@@ -33,6 +37,8 @@ describe('generateExpected', () => {
     const bad: RecurringTemplate = {
       id: 'bad',
       label: 'bad',
+      shortLabel: 'bad',
+      windowLabel: 'test',
       amountCents: 100,
       cadence: { kind: 'monthly', fromDay: 14, toDay: 7 },
       activeFrom: OPENING_AT,
@@ -45,6 +51,8 @@ describe('generateExpected', () => {
       const t: RecurringTemplate = {
         id: 'w',
         label: 'w',
+        shortLabel: 'w',
+        windowLabel: 'test',
         amountCents: 100,
         cadence: { kind: 'weekly', windowDays },
         activeFrom: OPENING_AT,
@@ -59,6 +67,8 @@ describe('expectedStatus', () => {
     const t: RecurringTemplate = {
       id: 'reposicion-claude',
       label: 'Reposición Claude',
+      shortLabel: 'Reposición Claude',
+      windowLabel: 'test',
       amountCents: 8000,
       cadence: { kind: 'monthly', fromDay: 7, toDay: 14 },
       activeFrom: OPENING_AT,

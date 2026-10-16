@@ -1,15 +1,47 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export type Route = { name: 'home' } | { name: 'capture'; id: string | null }
+export type Route =
+  | { name: 'home' }
+  | { name: 'capture'; id: string | null }
+  | { name: 'incomes' }
+  | { name: 'income'; id: string | null; expectedId: string | null }
 
 function parseHash(hash: string): Route {
-  const match = /^#\/captura(?:\/([\w-]+))?$/.exec(hash)
+  let match = /^#\/captura(?:\/([\w-]+))?$/.exec(hash)
   if (match) return { name: 'capture', id: match[1] ?? null }
+  if (hash === '#/ingresos') return { name: 'incomes' }
+  match = /^#\/ingreso(?:\/([\w-]+))?$/.exec(hash)
+  if (match) return { name: 'income', id: match[1] ?? null, expectedId: null }
+  match = /^#\/confirmar\/(.+)$/.exec(hash)
+  if (match) {
+    try {
+      return { name: 'income', id: null, expectedId: decodeURIComponent(match[1]) }
+    } catch {
+      return { name: 'home' } // malformed link: fall back instead of crashing the app
+    }
+  }
   return { name: 'home' }
 }
 
+// The last list screen the user was on; forms return there when they close.
+let lastList: Route = { name: 'home' }
+
+export function returnRoute(): Route {
+  return lastList
+}
+
 function hashOf(route: Route): string {
-  return route.name === 'home' ? '#/' : route.id ? `#/captura/${route.id}` : '#/captura'
+  switch (route.name) {
+    case 'home':
+      return '#/'
+    case 'capture':
+      return route.id ? `#/captura/${route.id}` : '#/captura'
+    case 'incomes':
+      return '#/ingresos'
+    case 'income':
+      if (route.expectedId) return `#/confirmar/${encodeURIComponent(route.expectedId)}`
+      return route.id ? `#/ingreso/${route.id}` : '#/ingreso'
+  }
 }
 
 export function navigate(route: Route): void {
@@ -28,6 +60,9 @@ export function useRoute(): Route {
     window.addEventListener('hashchange', onChange)
     return () => window.removeEventListener('hashchange', onChange)
   }, [])
+  useEffect(() => {
+    if (route.name === 'home' || route.name === 'incomes') lastList = route
+  }, [route])
   return route
 }
 

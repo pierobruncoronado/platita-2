@@ -66,6 +66,8 @@ describe('eval 3 (AC2, judgment): device timezone change does not move week boun
 const reposicion: RecurringTemplate = {
   id: 'reposicion-claude',
   label: 'Reposición Claude',
+  shortLabel: 'Reposición Claude',
+  windowLabel: 'test',
   amountCents: 8000,
   cadence: { kind: 'monthly', fromDay: 7, toDay: 14 },
   activeFrom: OPENING_AT,
@@ -114,6 +116,8 @@ describe('eval 6 (AC5): mesada not confirmed by Thursday → atrasada', () => {
   const mesada: RecurringTemplate = {
     id: 'mesada-papa',
     label: 'Mesada papá',
+    shortLabel: 'Mesada papá',
+    windowLabel: 'test',
     amountCents: 10000,
     cadence: { kind: 'weekly', windowDays: 4 }, // Mon–Thu
     activeFrom: '2026-10-19T05:00:00.000Z', // from W43

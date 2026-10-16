@@ -277,6 +277,147 @@ a {
   font-size: 15px;
 }
 
+/* ---------- Income / expected (Ingresos board) ---------- */
+:root {
+  --expected-fill: rgba(90, 130, 110, 0.22);
+  --expected-border: #5e8c77;
+  --expected-text: #b7d3c6;
+}
+
+.btn-green {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 0;
+  background: var(--green);
+  color: var(--on-green);
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.card-flat {
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.expected-card,
+.owed-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--expected-fill);
+  border: 1px dashed var(--expected-border);
+}
+
+.expected-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 4px;
+}
+
+.expected-title {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expected-sub,
+.owed-sub {
+  font-size: 12px;
+  color: var(--expected-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag-overdue {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 178, 36, 0.14);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+.tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  flex: none;
+}
+
+.static-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.static-row .row-sub {
+  white-space: normal;
+}
+
+.row-amount.income,
+.amount-income {
+  color: var(--green);
+}
+
+.if-arrives {
+  margin: 8px 0 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--expected-fill);
+  border: 1px dashed var(--expected-border);
+  color: var(--expected-text);
+  font-weight: 600;
+}
+
+.chip-income-on {
+  color: var(--green);
+  border: 1.5px solid var(--green);
+  background: rgba(43, 245, 160, 0.14);
+  font-weight: 700;
+}
+
+.kind-toggle {
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.kind {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.kind-on {
+  background: #5b6b85;
+  color: var(--text);
+  font-weight: 700;
+}
+
 /* ---------- Bottom nav ---------- */
 .bottom-nav {
   position: fixed;

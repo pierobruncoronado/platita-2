@@ -1,32 +1,36 @@
 import { Icon, type IconName } from './icons'
 
-// Semana / Mes / Ingresos stay visible but disabled until their milestones (H4–H6).
-const SOON: { label: string; icon: IconName }[] = [
-  { label: 'Semana', icon: 'week' },
-  { label: 'Mes', icon: 'month' },
-  { label: 'Ingresos', icon: 'wallet' },
-]
+type Tab = 'home' | 'incomes'
 
-export function BottomNav() {
-  const [semana, mes, ingresos] = SOON
-  const soon = (item: { label: string; icon: IconName }) => (
-    <button type="button" className="nav-item" disabled aria-label={`${item.label} (próximamente)`}>
-      <Icon name={item.icon} />
-      <span>{item.label}</span>
+// Semana / Mes stay visible but disabled until their milestones (H5–H6).
+function Soon({ label, icon }: { label: string; icon: IconName }) {
+  return (
+    <button type="button" className="nav-item" disabled aria-label={`${label} (próximamente)`}>
+      <Icon name={icon} />
+      <span>{label}</span>
     </button>
   )
+}
+
+function Tab({ href, label, icon, on }: { href: string; label: string; icon: IconName; on: boolean }) {
+  return (
+    <a href={href} className={`nav-item ${on ? 'active' : ''}`} aria-current={on ? 'page' : undefined}>
+      <Icon name={icon} />
+      <span>{label}</span>
+    </a>
+  )
+}
+
+export function BottomNav({ active }: { active: Tab }) {
   return (
     <nav className="bottom-nav" aria-label="Principal">
-      <a href="#/" className="nav-item active" aria-current="page">
-        <Icon name="home" />
-        <span>Inicio</span>
-      </a>
-      {soon(semana)}
+      <Tab href="#/" label="Inicio" icon="home" on={active === 'home'} />
+      <Soon label="Semana" icon="week" />
       <a href="#/captura" className="nav-fab" aria-label="Nuevo movimiento">
         <Icon name="plus" size={28} strokeWidth={2.4} />
       </a>
-      {soon(mes)}
-      {soon(ingresos)}
+      <Soon label="Mes" icon="month" />
+      <Tab href="#/ingresos" label="Ingresos" icon="wallet" on={active === 'incomes'} />
     </nav>
   )
 }

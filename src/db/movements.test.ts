@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto'
 import { afterEach, describe, expect, it } from 'vitest'
 import { PlatitaDB } from './db'
-import { createExpense, setUndone, updateExpense } from './movements'
+import { confirmIncome, createExpense, createIncome, setUndone, updateExpense, updateIncome } from './movements'
 
 const TZ = 'America/Lima'
 const NOW = '2026-10-16T13:05:00.000Z' // Fri 08:05 Lima
@@ -56,6 +56,64 @@ describe('movements repository', () => {
     await setUndone(db, m.id, true)
     await expect(updateExpense(db, m.id, { ...pasaje, amountCents: 900 }, TZ)).rejects.toThrow(/undone/)
     expect(await db.movements.get(m.id)).toMatchObject({ amountCents: 200 })
+  })
+
+  it('ingreso suelto: known source only, confirmed, counts as income', async () => {
+    const db = freshDb()
+    const m = await createIncome(db, { amountCents: 6000, source: 'Abuelo', note: '', occurredAt: NOW }, NOW, TZ)
+    expect(m).toMatchObject({ type: 'income', status: 'confirmed', source: 'Abuelo', recurringId: null, amountCents: 6000 })
+    await expect(createIncome(db, { amountCents: 6000, source: 'Tío', note: '', occurredAt: NOW }, NOW, TZ)).rejects.toThrow()
+    await expect(createIncome(db, { amountCents: 0, source: 'Papá', note: '', occurredAt: NOW }, NOW, TZ)).rejects.toThrow()
+    expect(await db.movements.count()).toBe(1)
+  })
+
+  it('confirmIncome: partial leaves the rest, a second confirmation settles, a third is refused', async () => {
+    const db = freshDb()
+    const item = {
+      id: 'reposicion-claude:2026-11',
+      templateId: 'reposicion-claude',
+      label: 'Reposición Claude',
+      amountCents: 8000,
+      windowStart: '2026-11-07T05:00:00.000Z',
+      windowEnd: '2026-11-15T05:00:00.000Z',
+    }
+    const at = '2026-11-08T15:00:00.000Z'
+    const first = await confirmIncome(db, item, 5000, '', at, at, TZ)
+    expect(first).toMatchObject({ recurringId: item.id, source: 'Reposición Claude', amountCents: 5000, weekId: '2026-W45' })
+    await confirmIncome(db, item, 5000, 'me dio de más', at, at, TZ) // over-pays the S/30 remainder
+    await expect(confirmIncome(db, item, 100, '', at, at, TZ)).rejects.toThrow(/settled/)
+    expect(await db.movements.count()).toBe(2)
+  })
+
+  it('confirmIncome refuses a date before the expected window', async () => {
+    const db = freshDb()
+    const item = {
+      id: 'reposicion-claude:2026-11',
+      templateId: 'reposicion-claude',
+      label: 'Reposición Claude',
+      amountCents: 8000,
+      windowStart: '2026-11-07T05:00:00.000Z',
+      windowEnd: '2026-11-15T05:00:00.000Z',
+    }
+    await expect(confirmIncome(db, item, 8000, '', '2026-10-30T15:00:00.000Z', '2026-11-08T15:00:00.000Z', TZ)).rejects.toThrow(/window/)
+    expect(await db.movements.count()).toBe(0)
+  })
+
+  it('updateIncome keeps the recurring source and refuses expenses', async () => {
+    const db = freshDb()
+    const item = {
+      id: 'mesada-papa:2026-W42',
+      templateId: 'mesada-papa',
+      label: 'Mesada papá',
+      amountCents: 10000,
+      windowStart: '2026-10-12T05:00:00.000Z',
+      windowEnd: '2026-10-16T05:00:00.000Z',
+    }
+    const paid = await confirmIncome(db, item, 10000, '', NOW, NOW, TZ)
+    await updateIncome(db, paid.id, { amountCents: 9000, source: 'Otro', note: 'faltó 10', occurredAt: NOW }, TZ)
+    expect(await db.movements.get(paid.id)).toMatchObject({ amountCents: 9000, source: 'Mesada papá', note: 'faltó 10' })
+    const exp = await createExpense(db, pasaje, NOW, TZ)
+    await expect(updateIncome(db, exp.id, { amountCents: 100, source: 'Papá', note: '', occurredAt: NOW }, TZ)).rejects.toThrow()
   })
 
   it('rejects zero amounts, unknown categories and mismatched subtypes (nothing written)', async () => {

@@ -1,6 +1,14 @@
 # DECISIONS — Platita 2
 Format per entry: **Qué / Por qué / Cómo / Trade-off / Gotcha**. Newest first.
 
+## 2026-10-15 — H4 Ingresos: confirmed / expected / recurring / ingreso suelto
+- **Qué:** Ingresos screen (confirmed this week, expected with Confirmar, recurring list), confirm screen (full/partial/over-payment, date chip), "ingreso suelto" with source chips (Papá, Abuelo, Hermana, Abuela, Otro), income edit/delete (red), Inicio "Te deben" card + "Si llega lo esperado" line, incomes in "Hoy", Gasto/Ingreso toggle.
+- **Por qué:** spec H4 / AC3, AC5. Piero (2026-10-15): only 2 recurring templates (mesada Mon–Thu S/100, Claude 7–14 S/80); abuelo is NOT recurring (Saturdays, S/50–80) → ingreso suelto; no in-app template creation; October Claude: S/50 received before the opening, S/30 owed, he got S/50 today → settled, S/20 extra.
+- **Cómo:** templates live in `catalog.ts` (with `shortLabel`/`windowLabel` so UI copy follows the data). The pre-opening S/50 is a seeded movement dated 1 min before `openingBalanceAt` with `recurringId = reposicion-claude:2026-10`: it never moves the balance (already inside S/230.84) but reduces what is owed. Confirmations are income movements with `recurringId`; `confirmIncome` re-reads related movements in a transaction and refuses settled items and dates before the item's window. Forms close to the list screen they came from (`returnRoute`); the Gasto ⇄ Ingreso toggle carries amount/note/date. "Si llega lo esperado" = En cuenta + Σ remaining of open items.
+- **Trade-off:** templates are code constants (changing an amount = a deploy); "+ Nuevo recurrente / + Nueva fuente" from the board are out of v1. Review #6 (filter by stored `weekId`) declined: the engine always derives the week from occurredAt + tz.
+- **Gotcha:** `expectedId` contains ':' → URL-encoded in `#/confirmar/…`, decode wrapped in try/catch (malformed link → Inicio). React-hooks lint forbids writing module state during render → `lastList` updated in an effect.
+- **GV (VA-1):** PASS vs Ingresos board — same sections, dashed grey-green expected cards, amber "atrasada" tag, green Confirmar, all targets ≥44 px; agreed deviations only (no abuelo recurring, no create-template buttons).
+
 ## 2026-10-15 — H3 real-use fix: edit amount + delete
 - **Qué:** On his Android, Piero could not delete an expense once the 5 s toast was gone, and could not change the amount when editing.
 - **Por qué:** no delete path existed after the toast; amount editing worked in emulation (412×730, keypad visible) but was not discoverable — typing appended to the loaded value and the note's soft keyboard could cover the keypad.

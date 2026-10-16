@@ -1,17 +1,18 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { db } from '../db/db'
 import { createExpense } from '../db/movements'
-import { categoryById, QUICK_TILES, type QuickTile } from '../domain/catalog'
+import { categoryById, QUICK_TILES, RECURRING_TEMPLATES, type QuickTile } from '../domain/catalog'
+import { generateExpected, openExpected } from '../domain/expected'
 import { balanceAt } from '../domain/flow'
 import { dayHeader, isSameLocalDay, timeLabel, weekHeader } from '../domain/labels'
 import { formatSoles, formatSolesShort } from '../domain/money'
 import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
+import { shortLabel } from './expectedText'
 import { navigate, useNow } from './hooks'
 import { Icon } from './icons'
 import type { ToastInput } from './UndoToast'
-
 
 export function Home({ settings, onCreated }: { settings: AppSettings; onCreated: (t: ToastInput) => void }) {
   const { tz, opening } = settings
@@ -38,9 +39,16 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
     }
   }
 
-  const balance = movements ? balanceAt(movements, now, tz, opening) : null
+  const balance = useMemo(() => (movements ? balanceAt(movements, now, tz, opening) : null), [movements, now, tz, opening])
+  const open = useMemo(
+    () => (movements ? openExpected(generateExpected(RECURRING_TEMPLATES, now, tz), movements, now) : []),
+    [movements, now, tz],
+  )
+  const owedCents = open.reduce((sum, x) => sum + x.status.remainingCents, 0)
+  // "Si llega lo esperado" = En cuenta + everything still por cobrar (same definition as ifExpectedArrives).
+  const ifArrives = balance ? balance.enCuentaCents + owedCents : null
   const today = (movements ?? [])
-    .filter((m) => m.type === 'expense' && !m.undone && isSameLocalDay(m.occurredAt, now, tz))
+    .filter((m) => m.status === 'confirmed' && !m.undone && m.occurredAt >= opening.at && isSameLocalDay(m.occurredAt, now, tz))
     .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))
 
   return (
@@ -61,6 +69,11 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
           <p className="muted small">
             Esta semana {balance.weeklyNetCents > 0 ? '+' : ''}
             {formatSolesShort(balance.weeklyNetCents)}
+          </p>
+        )}
+        {ifArrives !== null && owedCents > 0 && (
+          <p className="if-arrives small" data-testid="if-arrives">
+            Si llega lo esperado {formatSoles(ifArrives)}
           </p>
         )}
       </section>
@@ -94,6 +107,22 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
         {failed && <p className="error small">No se pudo guardar. Intenta otra vez.</p>}
       </section>
 
+      {owedCents > 0 && (
+        <section className="owed-card" aria-label="Te deben">
+          <div className="row-main">
+            <span className="row-title">Te deben {formatSolesShort(owedCents)}</span>
+            <span className="owed-sub">
+              {open
+                .map(({ item, status }) => `${shortLabel(item)} ${formatSolesShort(status.remainingCents)}${status.state === 'overdue' ? ' (atrasada)' : ''}`)
+                .join(' + ')}
+            </span>
+          </div>
+          <a href="#/ingresos" className="btn-green">
+            Confirmar
+          </a>
+        </section>
+      )}
+
       <section className="section" aria-labelledby="today-title">
         <h2 id="today-title" className="section-title">
           Hoy
@@ -104,18 +133,28 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
           <ul className="list">
             {today.map((m) => {
               const cat = categoryById(m.category)
+              const isIncome = m.type === 'income'
               return (
                 <li key={m.id}>
-                  <button type="button" className="row" onClick={() => navigate({ name: 'capture', id: m.id })}>
-                    <span className="dot" style={{ background: cat?.color }} aria-hidden="true" />
+                  <button
+                    type="button"
+                    className="row"
+                    onClick={() =>
+                      navigate(isIncome ? { name: 'income', id: m.id, expectedId: null } : { name: 'capture', id: m.id })
+                    }
+                  >
+                    <span className="dot" style={{ background: isIncome ? 'var(--green)' : cat?.color }} aria-hidden="true" />
                     <span className="row-main">
-                      <span className="row-title">{m.subtype ?? cat?.label ?? 'Gasto'}</span>
+                      <span className="row-title">{isIncome ? (m.source ?? 'Ingreso') : (m.subtype ?? cat?.label ?? 'Gasto')}</span>
                       <span className="row-sub">
                         {m.note ? `${m.note} · ` : ''}
                         {timeLabel(m.occurredAt, tz)}
                       </span>
                     </span>
-                    <span className="row-amount">{formatSolesShort(m.amountCents)}</span>
+                    <span className={`row-amount ${isIncome ? 'income' : ''}`}>
+                      {isIncome ? '+' : ''}
+                      {formatSolesShort(m.amountCents)}
+                    </span>
                   </button>
                 </li>
               )
@@ -124,7 +163,7 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
         )}
       </section>
 
-      <BottomNav />
+      <BottomNav active="home" />
     </main>
   )
 }

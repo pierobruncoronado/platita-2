@@ -1,16 +1,13 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { db } from '../db/db'
 import { createExpense, setUndone, updateExpense } from '../db/movements'
-import { centsToInput, parseAmountCents, pressKey, type KeypadKey } from '../domain/amount'
 import { CATEGORIES, categoryById, type CategoryId } from '../domain/catalog'
-import { fromDateTimeInput, toDateTimeInput, whenLabel } from '../domain/labels'
 import { formatSolesShort } from '../domain/money'
 import type { AppSettings } from './App'
-import { replaceRoute, useNow } from './hooks'
+import { AmountDisplay, KindToggle, Keypad, takeDraft, useAmountInput, WhenField } from './form'
+import { replaceRoute, returnRoute, useNow } from './hooks'
 import { Icon } from './icons'
 import type { ToastInput } from './UndoToast'
-
-const KEYS: KeypadKey[] = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'back']
 
 interface Props {
   settings: AppSettings
@@ -21,16 +18,16 @@ interface Props {
 export function Capture({ settings, editId, onCreated }: Props) {
   const { tz, opening } = settings
   const [now] = useNow()
-  const [amount, setAmount] = useState('')
+  const [draft] = useState(() => (editId ? null : takeDraft()))
+  const amount = useAmountInput(draft?.amount)
   const [category, setCategory] = useState<CategoryId | null>(null)
   const [subtype, setSubtype] = useState<string | null>(null)
-  const [note, setNote] = useState('')
-  const [occurredAt, setOccurredAt] = useState<string | null>(null) // null = "now" at save
+  const [note, setNote] = useState(draft?.note ?? '')
+  const [occurredAt, setOccurredAt] = useState<string | null>(draft?.occurredAt ?? null) // null = "now" at save
   const [loaded, setLoaded] = useState(editId === null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [amountFresh, setAmountFresh] = useState(false) // edit mode: loaded amount not touched yet
-  const dateInput = useRef<HTMLInputElement>(null)
+  const { load } = amount
 
   useEffect(() => {
     if (!editId) return
@@ -44,8 +41,7 @@ export function Capture({ settings, editId, onCreated }: Props) {
           replaceRoute({ name: 'home' })
           return
         }
-        setAmount(centsToInput(m.amountCents))
-        setAmountFresh(true)
+        load(m.amountCents)
         setCategory(categoryById(m.category)?.id ?? null)
         setSubtype(m.subtype)
         setNote(m.note)
@@ -59,42 +55,32 @@ export function Capture({ settings, editId, onCreated }: Props) {
     return () => {
       cancelled = true
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- load once per id
   }, [editId])
 
-  const amountCents = parseAmountCents(amount)
   const selected = categoryById(category)
-  const canSave = loaded && !saving && amountCents !== null && selected !== undefined
+  const canSave = loaded && !saving && amount.cents !== null && selected !== undefined
 
   function chooseCategory(id: CategoryId) {
     if (id !== category) setSubtype(null)
     setCategory(id)
   }
 
-  function openDatePicker() {
-    const input = dateInput.current
-    if (!input) return
-    try {
-      input.showPicker()
-    } catch {
-      input.focus()
-    }
-  }
-
   async function save() {
-    if (!canSave || amountCents === null || !selected) return
+    if (!canSave || amount.cents === null || !selected) return
     setSaving(true)
     setError(null)
     const at = new Date().toISOString()
-    const input = { amountCents, category: selected.id, subtype, note, occurredAt: occurredAt ?? at }
+    const input = { amountCents: amount.cents, category: selected.id, subtype, note, occurredAt: occurredAt ?? at }
     try {
       if (editId) {
         await updateExpense(db, editId, input, tz)
       } else {
         const m = await createExpense(db, input, at, tz)
         const label = subtype ?? selected.label
-        onCreated({ movementId: m.id, message: `${label} ${formatSolesShort(amountCents)} anotado`, undoTo: true })
+        onCreated({ movementId: m.id, message: `${label} ${formatSolesShort(amount.cents)} anotado`, undoTo: true })
       }
-      replaceRoute({ name: 'home' })
+      replaceRoute(returnRoute())
     } catch (err) {
       console.error(JSON.stringify({ event: 'expense_save_failed', message: String(err) }))
       setError('No se pudo guardar. Intenta otra vez.')
@@ -111,7 +97,7 @@ export function Capture({ settings, editId, onCreated }: Props) {
       await setUndone(db, editId, true)
       const label = subtype ?? selected?.label ?? 'Gasto'
       onCreated({ movementId: editId, message: `${label} eliminado`, undoTo: false })
-      replaceRoute({ name: 'home' })
+      replaceRoute(returnRoute())
     } catch (err) {
       console.error(JSON.stringify({ event: 'expense_delete_failed', message: String(err) }))
       setError('No se pudo eliminar. Intenta otra vez.')
@@ -119,32 +105,18 @@ export function Capture({ settings, editId, onCreated }: Props) {
     }
   }
 
-  function tapKey(k: KeypadKey) {
-    // Close the Android keyboard if the note had focus, so it can't cover the keypad.
-    if (document.activeElement instanceof HTMLElement) document.activeElement.blur()
-    // In edit mode the loaded amount is "selected": the first key replaces it.
-    setAmount((a) => pressKey(amountFresh ? '' : a, k))
-    setAmountFresh(false)
-  }
-
   return (
     <main className="screen capture">
       <header className="capture-top">
-        <button type="button" className="icon-btn" aria-label="Cerrar" onClick={() => replaceRoute({ name: 'home' })}>
+        <button type="button" className="icon-btn" aria-label="Cerrar" onClick={() => replaceRoute(returnRoute())}>
           <Icon name="close" size={20} strokeWidth={2.2} />
         </button>
-        <h1 className="capture-title">{editId ? 'Editar gasto' : 'Nuevo gasto'}</h1>
+        {editId ? <h1 className="capture-title">Editar gasto</h1> : <KindToggle active="expense" draft={{ amount: amount.amount, note, occurredAt }} />}
         <span className="icon-spacer" aria-hidden="true" />
       </header>
+      {!editId && <h1 className="visually-hidden">Nuevo gasto</h1>}
 
-      <p
-        className={`amount ${amount === '' ? 'amount-empty' : ''} ${amountFresh ? 'amount-fresh' : ''}`}
-        aria-live="polite"
-        data-testid="amount"
-      >
-        S/ <span className="amount-value">{amount === '' ? '0' : amount}</span>
-      </p>
-      {amountFresh && <p className="muted small hint">Teclea para cambiar el monto</p>}
+      <AmountDisplay amount={amount.amount} fresh={amount.fresh} />
 
       <div className="chips" role="radiogroup" aria-label="Categoría">
         {CATEGORIES.map((c) => {
@@ -198,45 +170,10 @@ export function Capture({ settings, editId, onCreated }: Props) {
             enterKeyHint="done"
           />
         </label>
-        <button type="button" className="when" onClick={openDatePicker}>
-          {whenLabel(occurredAt ?? now, now, tz)}
-        </button>
-        <input
-          ref={dateInput}
-          type="datetime-local"
-          className="visually-hidden"
-          tabIndex={-1}
-          aria-label="Fecha y hora"
-          value={toDateTimeInput(occurredAt ?? now, tz)}
-          min={toDateTimeInput(opening.at, tz)}
-          max={toDateTimeInput(now, tz)}
-          onChange={(e) => {
-            const iso = fromDateTimeInput(e.target.value, tz)
-            if (!iso || iso > new Date().toISOString()) return
-            // Spending before the opening balance is already inside it and would never count.
-            if (iso < opening.at) {
-              setError(`Esa fecha es anterior a tu saldo inicial (${whenLabel(opening.at, now, tz)}); ya está incluida en él.`)
-              return
-            }
-            setError(null)
-            setOccurredAt(iso)
-          }}
-        />
+        <WhenField occurredAt={occurredAt} onChange={setOccurredAt} onError={setError} now={now} tz={tz} opening={opening} />
       </div>
 
-      <div className="keypad">
-        {KEYS.map((k) => (
-          <button
-            key={k}
-            type="button"
-            className="key"
-            aria-label={k === 'back' ? 'Borrar' : k === '.' ? 'Punto decimal' : k}
-            onClick={() => tapKey(k)}
-          >
-            {k === 'back' ? <Icon name="back" /> : k}
-          </button>
-        ))}
-      </div>
+      <Keypad onKey={amount.tapKey} />
 
       {error && <p className="error small">{error}</p>}
 

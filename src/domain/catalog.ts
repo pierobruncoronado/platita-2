@@ -1,5 +1,6 @@
 // Capture taxonomy (spec §4 "Capture taxonomy") and quick tiles (spec §2).
 // Colors are the frozen category tokens; they never mean status.
+import type { RecurringTemplate } from './expected'
 
 export type CategoryId = 'transporte' | 'comida' | 'bebidas' | 'alcohol' | 'otros'
 
@@ -32,6 +33,32 @@ export interface QuickTile {
   subtype: string | null
   icon: TileIcon
 }
+
+// One-off income sources (spec §4 "Ingreso suelto").
+export const INCOME_SOURCES = ['Papá', 'Abuelo', 'Hermana', 'Abuela', 'Otro']
+
+// The two recurring incomes (spec §4). Mesada counts from the opening balance;
+// Claude's October instance is generated so its pre-opening partial payment is tracked.
+export const RECURRING_TEMPLATES: RecurringTemplate[] = [
+  {
+    id: 'mesada-papa',
+    label: 'Mesada papá',
+    shortLabel: 'Mesada',
+    windowLabel: 'de lun a jue',
+    amountCents: 10000,
+    cadence: { kind: 'weekly', windowDays: 4 },
+    activeFrom: '2026-10-15T19:31:00.000Z',
+  },
+  {
+    id: 'reposicion-claude',
+    label: 'Reposición Claude',
+    shortLabel: 'Claude',
+    windowLabel: 'entre el 7 y el 14',
+    amountCents: 8000,
+    cadence: { kind: 'monthly', fromDay: 7, toDay: 14 },
+    activeFrom: '2026-10-01T05:00:00.000Z',
+  },
+]
 
 // Order and defaults from the Inicio board.
 export const QUICK_TILES: QuickTile[] = [

@@ -38,12 +38,13 @@ Evidencia:
 - GV: screenshots app vs `docs/design-reference/{Main,Captura}.dc.html` rendered in Chromium; see DECISIONS H3.
 
 ### H4 — Pantalla Ingresos (confirmados/esperados/recurrentes/parcial) · cubre: AC-3, AC-5
-- [ ] G1 Aceptación
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md
+- [ ] G1 Aceptación — PASA en Playwright y evals; falta que Piero confirme sus S/150 reales en su Android
+- [x] G2 code-review — 9 hallazgos: 8 corregidos, 1 declinado con razón (DECISIONS H4)
+- [x] G3 DECISIONS.md
 - [ ] G4 commit + push ({hash})
-- [ ] GV vs tablero Ingresos
+- [x] GV vs tablero Ingresos — PASS
 Evidencia:
+- G1 (Playwright, reloj fijado jue 15 17:30 Lima, dispositivo NY): Inicio S/230.84 · "Si llega lo esperado S/360.84" · "Te deben S/130 (Claude S/30 atrasada + Mesada S/100)"; confirmar Mesada (prefill 100) + Claude (prefill 30 → tecleó 50) → En cuenta S/380.84, 0 esperados; suelto Abuelo 60 → 440.84, eliminar (rojo rgb(255,93,115)) → 380.84; viernes sin confirmar → 2 "atrasada" ámbar. `npm test` 50 passed; `npm run test:evals` 12 passed (incl. 5 evals H4 en lenguaje real); lint/tsc ok; regresión H3 OK.
 
 ### H5 — Inicio + Semana (donut, barras diarias, dos números) · cubre: AC-2, AC-4
 - [ ] G1 Aceptación

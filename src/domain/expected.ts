@@ -24,6 +24,8 @@ export type Cadence =
 export interface RecurringTemplate {
   id: string
   label: string
+  shortLabel: string // Inicio "Te deben" line
+  windowLabel: string // human window, e.g. "de lun a jue"
   amountCents: number
   cadence: Cadence
   activeFrom: string // ISO instant; periods whose window ended before this are not generated
@@ -136,8 +138,8 @@ export function expectedStatus(item: ExpectedItem, movements: Movement[], now: s
   return { state, confirmedCents: confirmed, remainingCents }
 }
 
-// Full or partial confirmation → a confirmed income dated now. Paying more than the
-// remainder is allowed (variable amounts): the income records the real amount.
+// Full or partial confirmation → a confirmed income dated now (or `occurredAt` when the
+// date chip was used). Paying more than the remainder is allowed: the income records the real amount.
 export function confirmExpected(
   item: ExpectedItem,
   movements: Movement[],
@@ -145,6 +147,7 @@ export function confirmExpected(
   now: string,
   tz: string,
   id: string,
+  occurredAt: string = now,
 ): Movement {
   if (!Number.isInteger(amountCents) || amountCents <= 0) {
     throw new Error('confirmation amount must be positive integer cents')
@@ -159,14 +162,22 @@ export function confirmExpected(
     category: null,
     subtype: null,
     note: '',
-    occurredAt: now,
+    occurredAt,
     createdAt: now,
-    weekId: weekIdOf(now, tz),
+    weekId: weekIdOf(occurredAt, tz),
     recurringId: item.id,
     source: item.label,
     status: 'confirmed',
     undone: false,
   }
+}
+
+// Items still por cobrar (pending or overdue), oldest first.
+export function openExpected(items: ExpectedItem[], movements: Movement[], now: string): { item: ExpectedItem; status: ExpectedStatus }[] {
+  return items
+    .map((item) => ({ item, status: expectedStatus(item, movements, now) }))
+    .filter((x) => x.status.state !== 'settled')
+    .sort((a, b) => a.item.windowStart.localeCompare(b.item.windowStart))
 }
 
 // "Si llega lo esperado" = En cuenta + everything still por cobrar (pending and overdue).
