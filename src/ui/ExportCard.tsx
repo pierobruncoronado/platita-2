@@ -26,7 +26,8 @@ function lastLabel(days: number | null): string {
 async function buildFiles(settings: AppSettings) {
   const now = new Date().toISOString()
   const movements = await db.movements.toArray()
-  const files = buildExport(movements, settings.tz, settings.opening, now)
+  const closes = await db.closes.toArray()
+  const files = buildExport(movements, settings.tz, settings.opening, now, closes)
   return { now, base: exportFileBase(now, settings.tz), ...files }
 }
 

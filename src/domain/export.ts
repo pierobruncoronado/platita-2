@@ -1,5 +1,5 @@
 // "Exportar todo" (spec AC7): every movement with full metadata, built for an LLM to analyze.
-import type { Movement } from '../db/db'
+import type { DayClose, Movement } from '../db/db'
 import { categoryById, RECURRING_TEMPLATES } from './catalog'
 import { generateExpected, openExpected } from './expected'
 import { closedWeeks, weeklyNet, type Opening } from './flow'
@@ -65,7 +65,7 @@ export interface ExportFiles {
   movementCount: number
 }
 
-export function buildExport(movements: Movement[], tz: string, opening: Opening, now: string): ExportFiles {
+export function buildExport(movements: Movement[], tz: string, opening: Opening, now: string, closedDays: DayClose[] = []): ExportFiles {
   const sorted = [...movements].sort((a, b) => a.occurredAt.localeCompare(b.occurredAt) || a.id.localeCompare(b.id))
   const rows = sorted.map((m) => row(m, tz, opening))
   // Money still por cobrar is derived, not stored: exported as status "expected" rows (spec AC7).
@@ -112,12 +112,14 @@ export function buildExport(movements: Movement[], tz: string, opening: Opening,
         net_cents: w.netCents,
         savings_after_cents: w.savingsAfterCents,
       })),
+      closed_days: [...closedDays].sort((a, b) => a.day.localeCompare(b.day)).map((c) => ({ day: c.day, closed_at: c.closedAt })),
       recurring_templates: RECURRING_TEMPLATES.map((t) => ({ id: t.id, label: t.label, amount_cents: t.amountCents, cadence: t.cadence })),
       notes_for_analysis: [
         'Amounts are integer cents of Peruvian soles (PEN).',
         'Weekly flow = confirmed income − expenses dated in the week (Mon 00:00–Sun 23:59, settings.timezone).',
         'Rows with undone=true were cancelled by the user and do not count.',
         'Rows with before_opening_balance=true are already included in the opening balance and do not count.',
+        'closed_days = days the user closed with "Cerrar el día" (civil days in settings.timezone); it is a habit log, not money.',
         'expected = income still owed (status "expected", amount = remaining); it never counts until confirmed.',
       ],
       movements: rows,

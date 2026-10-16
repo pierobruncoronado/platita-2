@@ -1214,3 +1214,82 @@ a {
 .base-segs span.on {
   background: var(--gold);
 }
+
+/* ---------- Cierre del día / racha ---------- */
+.streak-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.close-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.close-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.btn-amber {
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 14px;
+  background: transparent;
+  border: 1.5px solid var(--amber);
+  color: var(--amber);
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.streak-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.streak-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: rgba(247, 201, 72, 0.14);
+  color: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.streak-sub {
+  white-space: normal;
+}
+
+.close-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.close-save {
+  margin-top: auto;
+}

@@ -106,3 +106,20 @@ describe('export helpers', () => {
     expect(exportReminderDue('2027-01-10T17:00:00.000Z', NOW, TZ)).toBe(true)
   })
 })
+
+describe('H7: export keeps the habit log', () => {
+  it('lists closed days in the JSON, sorted, and does not change the CSV', () => {
+    const closes = [
+      { day: '2026-10-17', closedAt: '2026-10-18T03:00:00.000Z' },
+      { day: '2026-10-16', closedAt: '2026-10-17T03:00:00.000Z' },
+    ]
+    const withCloses = buildExport([], 'America/Lima', { balanceCents: 23084, at: '2026-10-15T19:31:00.000Z' }, '2026-10-18T15:00:00.000Z', closes)
+    const without = buildExport([], 'America/Lima', { balanceCents: 23084, at: '2026-10-15T19:31:00.000Z' }, '2026-10-18T15:00:00.000Z')
+    expect(JSON.parse(withCloses.json).closed_days).toEqual([
+      { day: '2026-10-16', closed_at: '2026-10-17T03:00:00.000Z' },
+      { day: '2026-10-17', closed_at: '2026-10-18T03:00:00.000Z' },
+    ])
+    expect(JSON.parse(without.json).closed_days).toEqual([])
+    expect(withCloses.csv).toBe(without.csv)
+  })
+})

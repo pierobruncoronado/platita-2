@@ -53,6 +53,12 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
           <p className="muted small">{dayHeader(now, tz)}</p>
           <h1 className="title">{weekHeader(now, tz)}</h1>
         </div>
+        {view && view.streak.alive && (
+          <span className="streak-chip" data-testid="streak-chip">
+            <Icon name="flame" size={18} />
+            <span>{view.streak.count === 1 ? '1 día' : `${view.streak.count} días`}</span>
+          </span>
+        )}
       </header>
 
       <FreeCard view={view} />
@@ -99,6 +105,20 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
           <a href="#/ingresos" className="btn-green">
             Confirmar
           </a>
+        </section>
+      )}
+
+      {view && (
+        <section className="close-card" aria-label="Cierra el día" data-testid="close-card">
+          <div className="row-main">
+            <span className="row-title">{view.closedToday ? 'Día cerrado' : 'Cierra el día'}</span>
+            <span className="close-sub">{view.closedToday ? 'Listo por hoy. Mañana, otro cierre.' : '¿Falta algo? 30 segundos'}</span>
+          </div>
+          {!view.closedToday && (
+            <a href="#/cerrar" className="btn-amber">
+              Cerrar
+            </a>
+          )}
         </section>
       )}
 

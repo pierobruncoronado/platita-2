@@ -4,6 +4,7 @@ import { setUndone } from '../db/movements'
 import { getOpening, getTimezone, seedDefaults } from '../db/seed'
 import type { Opening } from '../domain/flow'
 import { Capture } from './Capture'
+import { Close } from './Close'
 import { Home } from './Home'
 import { IncomeForm } from './IncomeForm'
 import { Incomes } from './Incomes'
@@ -94,6 +95,7 @@ export function App() {
         />
       )}
       {route.name === 'incomes' && <Incomes settings={state.settings} />}
+      {route.name === 'close' && <Close settings={state.settings} />}
       {route.name === 'month' && <Month settings={state.settings} />}
       {route.name === 'week' && <Week settings={state.settings} />}
       {route.name === 'home' && <Home settings={state.settings} onCreated={showUndo} />}

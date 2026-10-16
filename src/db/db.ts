@@ -20,6 +20,12 @@ export interface Movement {
   undone: boolean
 }
 
+// One row per closed day (civil day in the configured timezone). Never holds amounts.
+export interface DayClose {
+  day: string // "YYYY-MM-DD"
+  closedAt: string // ISO instant
+}
+
 export type SettingKey = 'timezone' | 'openingBalanceCents' | 'openingBalanceAt' | 'lastExportAt'
 
 export interface Setting {
@@ -30,12 +36,19 @@ export interface Setting {
 export class PlatitaDB extends Dexie {
   movements!: EntityTable<Movement, 'id'>
   settings!: EntityTable<Setting, 'key'>
+  closes!: EntityTable<DayClose, 'day'>
 
   constructor(name = 'platita') {
     super(name)
     this.version(1).stores({
       movements: 'id, type, occurredAt, weekId, recurringId, status',
       settings: 'key',
+    })
+    // v2 (H7): closed days. Additive — existing stores are untouched.
+    this.version(2).stores({
+      movements: 'id, type, occurredAt, weekId, recurringId, status',
+      settings: 'key',
+      closes: 'day',
     })
   }
 }

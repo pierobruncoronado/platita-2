@@ -6,6 +6,7 @@ import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
 import { Donut } from './Donut'
 import { useNow } from './hooks'
+import { Icon } from './icons'
 import { PeriodToggle } from './PeriodToggle'
 import { useWeekView } from './useWeekView'
 
@@ -50,6 +51,7 @@ export function Week({ settings }: { settings: AppSettings }) {
               Lo que sobre pasa solo a Ahorro (dom 23:59). Si queda negativo, se descuenta del Ahorro.
             </p>
           </section>
+          <StreakCard view={view} />
         </>
       )}
 
@@ -178,6 +180,29 @@ function ExpectedCard({ view }: { view: View }) {
         <span className="muted">{formatSolesShort(incomeCents)} confirmado</span>
         <span className="exp-amount">{formatSolesShort(owedCents)} por llegar</span>
       </div>
+    </section>
+  )
+}
+
+function StreakCard({ view }: { view: View }) {
+  const { streak, weekCloses } = view
+  const title =
+    weekCloses.closed === 1 ? `1 día cerrado de ${weekCloses.elapsed}` : `${weekCloses.closed} días cerrados de ${weekCloses.elapsed}`
+  const sub = streak.alive
+    ? 'Racha viva · se rompe si pasan 3 días sin cerrar'
+    : streak.totalClosed > 0
+      ? 'Racha en 0. Cierra hoy y empiezas otra.'
+      : 'Cierra el día para empezar tu racha.'
+  return (
+    <section className="streak-card" aria-label="Racha" data-testid="streak-card">
+      <span className="streak-icon">
+        <Icon name="flame" size={22} />
+      </span>
+      <div className="row-main">
+        <span className="row-title">{title}</span>
+        <span className="row-sub streak-sub">{sub}</span>
+      </div>
+      {streak.level > 0 && <span className="tag" data-testid="level">Nivel {streak.level}</span>}
     </section>
   )
 }

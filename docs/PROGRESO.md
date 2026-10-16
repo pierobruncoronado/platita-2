@@ -2,7 +2,7 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H6 (implementado, falta push + uso real en el Android) → luego H7, H8, H10 · Pendientes en el Android de Piero: H9 G1 (2 archivos en Descargas), H5 G1 (Inicio/Semana) y H6 G1 (Mes) (H1–H4 cerrados 2026-10-15)
+Nodo: build · Milestone activo: H7 (implementado, falta push + uso real en el Android) → luego H8, H10 · Pendientes en el Android de Piero: H9 G1 (2 archivos en Descargas), H5 G1 (Inicio/Semana), H6 G1 (Mes) y H7 G1 (cerrar el día) (H1–H4 cerrados 2026-10-15)
 Saldo real en el teléfono de Piero al cierre de H4: S/380.84 (230.84 + mesada 100 + Claude 50).
 Orden aprobado por Piero (2026-10-16): aviso de versión nueva (hecho, 78617a3) → H9 → H5 → H6 → H7 → H8 → H10.
 Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
@@ -61,18 +61,19 @@ Evidencia:
 - [ ] G1 Aceptación — PASA en Playwright y evals; falta usarla en el Android de Piero
 - [x] G2 code-review — 7 hallazgos: 4 corregidos, 3 declinados con razón (DECISIONS H6)
 - [x] G3 DECISIONS.md
-- [ ] G4 commit + push ({hash})
+- [x] G4 commit + push — b87fa22 pushed; bundle público contiene "Midiendo tu"
 - [x] GV vs tablero Mes — PASS
 Evidencia:
 - G1: `npm test` 67 passed; `npm run test:evals` 28 passed (4 evals H6 en lenguaje real: Te quedó = lo que los cierres dominicales mandaron a Ahorro, semana en curso visible el 28 oct, línea base 1→3→4 semanas sin Claude ni tope); tsc/lint/build ok. Playwright 390×844 (miércoles 28 oct 17:30 Lima, dispositivo NY): Te quedó −S/24 (S/100 entró · S/124 salió), dona S/124 con Claude S/87 aparte, filas 12/19/26 oct, 1 barra Esperado, línea base "1 de 4", toggle Semana⇄Mes y nav Mes OK, 0 targets <44px, 0 errores de consola; mes vacío → S/0.
 
 ### H7 — Cierre del día + racha + XP · cubre: AC-6; eval 7
-- [ ] G1 Aceptación (racha viva con 2 días sin cerrar, se rompe con 3)
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md
+- [ ] G1 Aceptación (racha viva con 2 días sin cerrar, se rompe con 3) — PASA en Playwright y evals; falta usarlo en el Android de Piero
+- [x] G2 code-review — 6 hallazgos: 2 corregidos, 4 declinados con razón (DECISIONS H7)
+- [x] G3 DECISIONS.md
 - [ ] G4 commit + push ({hash})
-- [ ] GV Gate visual
+- [x] GV Gate visual — PASS
 Evidencia:
+- G1: `npm test` 82 passed; `npm run test:evals` 34 passed (eval 7 en lenguaje real: viva con 2 días sin cerrar, se rompe con el 3.º, cierre dom 23:58 cuenta para el domingo, export con closed_days); tsc/lint/build ok. Playwright 390×844 (jue 22 oct 17:30 Lima, dispositivo NY): sin cierres → sin chip, tarjeta "Cierra el día"; Pasaje + "Anotar un gasto" desde ¿Falta algo? vuelve a #/cerrar con 2 filas; Cerrar el día → chip "1 día", tarjeta "Día cerrado", Semana "1 día cerrado de 4 · Nivel 1", persiste tras recargar; vie cierra → "2 días"; lun (2 días pasados) → "2 días"; mar (3 pasados) → sin chip, "Racha en 0"; guarda de medianoche: abierto 23:59, toque 00:00:20 → no cierra, 2.º toque cierra el día nuevo; 0 targets <44px, 0 errores de consola.
 
 ### H8 — PIN + spike de huella (1 sesión) · cubre: AC-8; eval 11
 - [ ] G1 Aceptación (PIN siempre; huella solo si funciona en el Android de Piero)
