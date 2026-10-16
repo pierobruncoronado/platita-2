@@ -52,7 +52,7 @@ Evidencia:
 - [ ] G1 Aceptación — PASA en Playwright y evals; falta usarla en el Android de Piero
 - [x] G2 code-review — 9 hallazgos: 5 corregidos, 3 declinados con razón (DECISIONS H5), 1 era el cierre de docs
 - [x] G3 DECISIONS.md
-- [ ] G4 commit + push ({hash})
+- [x] G4 commit + push — 6342228 pushed; bundle público (assets/index-DohjNy7l.js) contiene "Libre esta semana", "Cierre del domingo", "va aparte"
 - [x] GV vs tableros Inicio y Semana — PASS
 Evidencia:
 - G1: `npm test` 59 passed; `npm run test:evals` 24 passed (3 evals H5 en lenguaje real: Libre ámbar/verde, Claude fuera de hormigas, proyección del domingo = cierre real); tsc/lint/build ok. Playwright 390×844 (jueves 22 oct 17:30 Lima, dispositivo NY): semana con gastos (1 deshecho y 1 de la semana pasada ignorados) → Libre −S/115 ámbar rgb(255,178,36), En cuenta S/115.84, hormigas S/28, días 9·5·9·5·–·–·–, Jue resaltado; con ingreso S/200 → Libre S/85 verde; semana vacía → S/0 verde; 0 errores de consola; 0 targets <44px. Flujo: Captura Otros → Claude 87 → Libre −S/87, dona S/0 + "Claude S/87 va aparte".
