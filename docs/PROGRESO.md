@@ -2,7 +2,7 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H7 (implementado, falta push + uso real en el Android) → luego H8, H10 · Pendientes en el Android de Piero: H9 G1 (2 archivos en Descargas), H5 G1 (Inicio/Semana), H6 G1 (Mes) y H7 G1 (cerrar el día) (H1–H4 cerrados 2026-10-15)
+Nodo: build · Milestone activo: H8 (PIN implementado; falta push + spike de huella en el Android) → luego H10 · Pendientes en el Android de Piero: H9 G1 (2 archivos en Descargas), H5 G1, H6 G1, H7 G1 (cerrar el día) y H8 G1 (crear PIN + probar huella). OJO: tras desplegar H8 la app pide crear un PIN en el primer arranque (H1–H4 cerrados 2026-10-15)
 Saldo real en el teléfono de Piero al cierre de H4: S/380.84 (230.84 + mesada 100 + Claude 50).
 Orden aprobado por Piero (2026-10-16): aviso de versión nueva (hecho, 78617a3) → H9 → H5 → H6 → H7 → H8 → H10.
 Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
@@ -70,17 +70,18 @@ Evidencia:
 - [ ] G1 Aceptación (racha viva con 2 días sin cerrar, se rompe con 3) — PASA en Playwright y evals; falta usarlo en el Android de Piero
 - [x] G2 code-review — 6 hallazgos: 2 corregidos, 4 declinados con razón (DECISIONS H7)
 - [x] G3 DECISIONS.md
-- [ ] G4 commit + push ({hash})
+- [x] G4 commit + push — 759b00d pushed; bundle público contiene "Día cerrado"
 - [x] GV Gate visual — PASS
 Evidencia:
 - G1: `npm test` 82 passed; `npm run test:evals` 34 passed (eval 7 en lenguaje real: viva con 2 días sin cerrar, se rompe con el 3.º, cierre dom 23:58 cuenta para el domingo, export con closed_days); tsc/lint/build ok. Playwright 390×844 (jue 22 oct 17:30 Lima, dispositivo NY): sin cierres → sin chip, tarjeta "Cierra el día"; Pasaje + "Anotar un gasto" desde ¿Falta algo? vuelve a #/cerrar con 2 filas; Cerrar el día → chip "1 día", tarjeta "Día cerrado", Semana "1 día cerrado de 4 · Nivel 1", persiste tras recargar; vie cierra → "2 días"; lun (2 días pasados) → "2 días"; mar (3 pasados) → sin chip, "Racha en 0"; guarda de medianoche: abierto 23:59, toque 00:00:20 → no cierra, 2.º toque cierra el día nuevo; 0 targets <44px, 0 errores de consola.
 
 ### H8 — PIN + spike de huella (1 sesión) · cubre: AC-8; eval 11
-- [ ] G1 Aceptación (PIN siempre; huella solo si funciona en el Android de Piero)
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md (resultado del spike)
+- [ ] G1 Aceptación (PIN siempre; huella solo si funciona en el Android de Piero) — PIN PASA en Playwright y evals; falta crear el PIN y el spike de huella en el Android
+- [x] G2 code-review — 8 hallazgos: 6 corregidos, 2 declinados con razón (DECISIONS H8)
+- [ ] G3 DECISIONS.md (resultado del spike) — entrada H8 escrita; falta el resultado real del spike en el Android
 - [ ] G4 commit + push ({hash})
 Evidencia:
+- G1: `npm test` 98 passed; `npm run test:evals` 38 passed (eval 11 en lenguaje real: 90 s fuera → pide PIN, 30 s no; 5 fallos → espera y rechaza hasta el PIN correcto; fila de PIN dañada sigue bloqueada; Olvidé mi PIN conserva los movimientos); tsc/lint/build ok. Playwright 390×844 con autenticador WebAuthn virtual: primer arranque → pide crear PIN (sin montos en pantalla), discordancia avisa; apertura en frío pide PIN; 5 fallos rápidos → "Espera 30 s", teclado deshabilitado, la espera sobrevive a recargar, Olvidé mi PIN deshabilitado durante la espera, +31 s → PIN correcto abre; oculto → cubierta inmediata; 30 s fuera → sigue abierta; 90 s fuera → pide PIN y no hay montos; borrador "S/ 75" sobrevive al re-bloqueo; huella: activar → "Huella activada", apertura en frío sin PIN, no verificada → se queda en PIN y el PIN sigue funcionando; Olvidé mi PIN → confirmar → crear nuevo y el gasto sigue; 0 targets <44px.
 
 ### H9 — Exportar todo (CSV + JSON) + recordatorio semanal · cubre: AC-7; eval 8 · (adelantado antes de H5, OK de Piero 2026-10-16)
 - [ ] G1 Aceptación (contenido verificado campo por campo) — PASA en evals + Playwright; falta exportar en el Android de Piero y ver los 2 archivos en Descargas

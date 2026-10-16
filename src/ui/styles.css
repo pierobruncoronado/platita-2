@@ -1293,3 +1293,102 @@ a {
 .close-save {
   margin-top: auto;
 }
+
+/* ---------- Bloqueo (PIN) ---------- */
+.screen.lock {
+  justify-content: center;
+  align-items: stretch;
+  gap: 18px;
+}
+
+.lock-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  text-align: center;
+}
+
+.lock-sub,
+.lock-msg {
+  text-align: center;
+}
+
+.lock-msg {
+  min-height: 20px;
+}
+
+.pinpad {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pin-dots {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.pin-dots span {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  border: 2px solid var(--border-dashed);
+}
+
+.pin-dots span.on {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.pinpad .keypad {
+  margin-top: 0;
+}
+
+.key:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.lock-forgot {
+  min-height: 44px;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.privacy-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.privacy-mark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  color: var(--muted);
+}
+
+.security-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.security-sub {
+  white-space: normal;
+}
+
+.lock-forgot:disabled {
+  opacity: 0.4;
+  text-decoration: none;
+  cursor: default;
+}

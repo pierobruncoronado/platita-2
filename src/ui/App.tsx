@@ -6,6 +6,7 @@ import type { Opening } from '../domain/flow'
 import { Capture } from './Capture'
 import { Close } from './Close'
 import { Home } from './Home'
+import { LockGate } from './LockGate'
 import { IncomeForm } from './IncomeForm'
 import { Incomes } from './Incomes'
 import { Month } from './Month'
@@ -82,6 +83,7 @@ export function App() {
   return (
     <>
       <UpdateBanner />
+      <LockGate>
       {route.name === 'capture' && (
         <Capture key={route.id ?? 'new'} settings={state.settings} editId={route.id} onCreated={showUndo} />
       )}
@@ -100,6 +102,7 @@ export function App() {
       {route.name === 'week' && <Week settings={state.settings} />}
       {route.name === 'home' && <Home settings={state.settings} onCreated={showUndo} />}
       {toast && <UndoToast toast={toast} onUndo={undo} onDone={dismiss} />}
+      </LockGate>
     </>
   )
 }

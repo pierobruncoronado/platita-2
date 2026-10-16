@@ -7,6 +7,7 @@ import { formatSolesShort } from '../domain/money'
 import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
 import { ExportCard } from './ExportCard'
+import { SecurityCard } from './SecurityCard'
 import { FreeCard } from './FreeCard'
 import { shortLabel } from './expectedText'
 import { navigate, useNow } from './hooks'
@@ -165,6 +166,8 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
       </section>
 
       <ExportCard settings={settings} now={now} />
+
+      <SecurityCard />
 
       <BottomNav active="home" />
     </main>

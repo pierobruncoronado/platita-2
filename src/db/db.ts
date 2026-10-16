@@ -26,7 +26,16 @@ export interface DayClose {
   closedAt: string // ISO instant
 }
 
-export type SettingKey = 'timezone' | 'openingBalanceCents' | 'openingBalanceAt' | 'lastExportAt'
+export type SettingKey =
+  | 'timezone'
+  | 'openingBalanceCents'
+  | 'openingBalanceAt'
+  | 'lastExportAt'
+  | 'pinRecord' // JSON {salt, hash, iterations} — never the PIN itself
+  | 'pinFailures'
+  | 'pinLockedUntil' // epoch ms
+  | 'biometricId' // WebAuthn credential id (base64url)
+  | 'biometricSpike' // 'ok' | 'failed:<reason>'
 
 export interface Setting {
   key: SettingKey
