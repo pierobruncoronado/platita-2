@@ -9,6 +9,7 @@ import { IncomeForm } from './IncomeForm'
 import { Incomes } from './Incomes'
 import { useRoute } from './hooks'
 import { UndoToast, type Toast, type ToastInput } from './UndoToast'
+import { UpdateBanner } from './UpdateBanner'
 
 let toastSeq = 0
 
@@ -66,6 +67,7 @@ export function App() {
 
   return (
     <>
+      <UpdateBanner />
       {route.name === 'capture' && (
         <Capture key={route.id ?? 'new'} settings={state.settings} editId={route.id} onCreated={showUndo} />
       )}

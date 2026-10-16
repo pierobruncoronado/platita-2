@@ -42,6 +42,7 @@ Design reference (approved by Piero, "está perfecto"): Claude Design canvas "Pl
 - **Latency:** baseline first, then fix the number. Target to measure: cold open → expense logged ≤3 taps for tiles; do not invent ms thresholds.
 - **Cost:** S/0 recurring. If anything would cost money, flag it before building.
 - **Data safety:** weekly export reminder (CSV+JSON to Downloads) because local data dies with the phone.
+- **Updates:** a new deploy never reloads the app by itself; a banner "Hay una versión nueva · Actualizar" applies it on tap (Piero, 2026-10-16, after an update confusion).
 - **Demonstrability:** N/A by design — personal tool, no stranger demo. (Stated explicitly per rule 5.)
 - **CI:** lint + deterministic unit tests of the money engine (pure functions, no real APIs/DB in CI). No evals hit real services.
 

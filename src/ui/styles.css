@@ -418,6 +418,24 @@ a {
   font-weight: 700;
 }
 
+/* ---------- Update banner ---------- */
+.update-banner {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: calc(8px + env(safe-area-inset-top)) 16px 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--green);
+  font-size: 14px;
+  font-weight: 600;
+}
+
 /* ---------- Bottom nav ---------- */
 .bottom-nav {
   position: fixed;

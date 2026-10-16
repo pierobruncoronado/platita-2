@@ -9,7 +9,8 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      // New deploys wait for the user's tap on "Actualizar" (UpdateBanner), never auto-reload mid-entry.
+      registerType: 'prompt',
       includeAssets: ['icon.svg'],
       manifest: {
         name: 'Platita',

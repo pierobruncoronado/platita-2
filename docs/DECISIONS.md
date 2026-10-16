@@ -1,6 +1,13 @@
 # DECISIONS — Platita 2
 Format per entry: **Qué / Por qué / Cómo / Trade-off / Gotcha**. Newest first.
 
+## 2026-10-16 — Update banner instead of silent auto-update
+- **Qué:** `registerType: 'prompt'` + `UpdateBanner` ("Hay una versión nueva · Actualizar"); the app checks for a new SW when it becomes visible and every hour.
+- **Por qué:** Piero thought the app "doesn't update" (that time the deploy simply wasn't pushed yet), and auto-update needed 2 launches with no feedback; an auto-reload could also wipe an entry being typed.
+- **Cómo:** `useRegisterSW` from `virtual:pwa-register/react`; tap → `updateServiceWorker()` (skip waiting → reload). Playwright: SW controlling → server sw.js changed → banner appears while an unsaved "S/ 7" stays on screen → Actualizar → reload, no waiting SW left.
+- **Trade-off:** updates are applied only when Piero taps (he may postpone).
+- **Gotcha:** one-time transition: the installed auto-update SW does not message the new waiting SW, so the first prompt-mode version activates after a full close/reopen; from then on the banner appears. "Pushed ≠ updated": check the live bundle before telling Piero to reopen.
+
 ## 2026-10-15 — H4 Ingresos: confirmed / expected / recurring / ingreso suelto
 - **Qué:** Ingresos screen (confirmed this week, expected with Confirmar, recurring list), confirm screen (full/partial/over-payment, date chip), "ingreso suelto" with source chips (Papá, Abuelo, Hermana, Abuela, Otro), income edit/delete (red), Inicio "Te deben" card + "Si llega lo esperado" line, incomes in "Hoy", Gasto/Ingreso toggle.
 - **Por qué:** spec H4 / AC3, AC5. Piero (2026-10-15): only 2 recurring templates (mesada Mon–Thu S/100, Claude 7–14 S/80); abuelo is NOT recurring (Saturdays, S/50–80) → ingreso suelto; no in-app template creation; October Claude: S/50 received before the opening, S/30 owed, he got S/50 today → settled, S/20 extra.
