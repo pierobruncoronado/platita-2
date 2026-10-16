@@ -803,3 +803,349 @@ a {
   color: var(--muted);
   cursor: not-allowed;
 }
+
+/* ---------- Libre esta semana (Inicio) ---------- */
+.free-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.free-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.free-amount {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 56px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.tone-ok {
+  color: var(--green);
+}
+
+.tone-warn {
+  color: var(--amber);
+}
+
+.free-account {
+  padding-bottom: 6px;
+  text-align: right;
+}
+
+.week-bar {
+  display: flex;
+  height: 14px;
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--surface-2);
+  gap: 2px;
+}
+
+.week-bar > span {
+  display: block;
+  height: 100%;
+}
+
+.bar-expected {
+  background: var(--expected-fill);
+  border: 1px dashed var(--expected-border);
+  box-sizing: border-box;
+}
+
+.week-bar > .bar-expected {
+  border-radius: 0 7px 7px 0;
+}
+
+.week-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.week-legend span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  flex: none;
+}
+
+.swatch-expected {
+  background: var(--expected-fill);
+  border: 1px dashed var(--expected-border);
+  box-sizing: border-box;
+}
+
+.sunday-line {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: rgba(247, 201, 72, 0.12);
+  border: 1px dashed var(--gold);
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sunday-line svg {
+  flex: none;
+}
+
+/* ---------- Semana ---------- */
+.seg-toggle {
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.seg {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.seg:disabled {
+  opacity: 0.45;
+}
+
+.seg-on {
+  background: var(--green);
+  color: var(--on-green);
+  font-weight: 700;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.donut-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.donut {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  flex: none;
+}
+
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.donut-total {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 24px;
+}
+
+.donut-cap {
+  font-size: 11px;
+}
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.legend-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend b,
+.exp-amount {
+  font-family: var(--font-display);
+}
+
+.days {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  min-height: 128px;
+  padding-top: 4px;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 36px;
+  color: var(--muted);
+}
+
+.day-val {
+  font-size: 11px;
+}
+
+.day-name {
+  font-size: 12px;
+}
+
+.day-bar {
+  width: 24px;
+  display: flex;
+  flex-direction: column-reverse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.day-empty {
+  width: 24px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border);
+}
+
+.day-today {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.day-today .day-bar {
+  box-shadow: 0 0 0 2px var(--green);
+}
+
+.exp-bar > span {
+  min-width: 6px;
+}
+
+.exp-bar {
+  display: flex;
+  height: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+  gap: 2px;
+  background: var(--surface-2);
+}
+
+.exp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.exp-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.exp-list .tag-overdue {
+  margin-left: 8px;
+}
+
+.exp-part {
+  font-size: 11px;
+}
+
+.exp-amount {
+  color: var(--expected-text);
+}
+
+.exp-foot {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.sunday-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px;
+  border-radius: 24px;
+  background: rgba(247, 201, 72, 0.1);
+  border: 1px dashed var(--gold);
+}
+
+.sunday-card p {
+  margin: 0;
+}
+
+.eyebrow.gold {
+  color: var(--gold);
+}
+
+.sunday-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.sunday-amount {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  color: var(--gold);
+}
+
+.sunday-formula,
+.sunday-note {
+  font-size: 12px;
+  color: #c9b77a;
+}

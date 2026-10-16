@@ -7,6 +7,7 @@ import { Capture } from './Capture'
 import { Home } from './Home'
 import { IncomeForm } from './IncomeForm'
 import { Incomes } from './Incomes'
+import { Week } from './Week'
 import { useRoute } from './hooks'
 import { UndoToast, type Toast, type ToastInput } from './UndoToast'
 import { UpdateBanner } from './UpdateBanner'
@@ -92,6 +93,7 @@ export function App() {
         />
       )}
       {route.name === 'incomes' && <Incomes settings={state.settings} />}
+      {route.name === 'week' && <Week settings={state.settings} />}
       {route.name === 'home' && <Home settings={state.settings} onCreated={showUndo} />}
       {toast && <UndoToast toast={toast} onUndo={undo} onDone={dismiss} />}
     </>

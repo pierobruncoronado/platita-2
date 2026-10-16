@@ -1,8 +1,8 @@
 import { Icon, type IconName } from './icons'
 
-type Tab = 'home' | 'incomes'
+type Tab = 'home' | 'week' | 'incomes'
 
-// Semana / Mes stay visible but disabled until their milestones (H5–H6).
+// Mes stays visible but disabled until its milestone (H6).
 function Soon({ label, icon }: { label: string; icon: IconName }) {
   return (
     <button type="button" className="nav-item" disabled aria-label={`${label} (próximamente)`}>
@@ -25,7 +25,7 @@ export function BottomNav({ active }: { active: Tab }) {
   return (
     <nav className="bottom-nav" aria-label="Principal">
       <Tab href="#/" label="Inicio" icon="home" on={active === 'home'} />
-      <Soon label="Semana" icon="week" />
+      <Tab href="#/semana" label="Semana" icon="week" on={active === 'week'} />
       <a href="#/captura" className="nav-fab" aria-label="Nuevo movimiento">
         <Icon name="plus" size={28} strokeWidth={2.4} />
       </a>

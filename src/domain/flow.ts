@@ -18,7 +18,7 @@ export interface WeekClose {
   savingsAfterCents: number
 }
 
-function countsInFlow(m: Movement, openingAtMs: number): boolean {
+export function countsInFlow(m: Movement, openingAtMs: number): boolean {
   return !m.undone && m.status === 'confirmed' && toMs(m.occurredAt) >= openingAtMs
 }
 

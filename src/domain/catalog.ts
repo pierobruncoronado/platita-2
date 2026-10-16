@@ -11,12 +11,15 @@ export interface Category {
   subtypes: string[] // optional detail row; empty = no second row
 }
 
+// Detail of Otros that marks Claude's monthly charge; Semana keeps it out of the hormigas charts.
+export const CLAUDE_SUBTYPE = 'Claude'
+
 export const CATEGORIES: Category[] = [
   { id: 'transporte', label: 'Transporte', color: '#FF8A3D', subtypes: ['Pasaje', 'Taxi'] },
   { id: 'comida', label: 'Comida', color: '#FF5CA8', subtypes: ['Snack', 'Menú'] },
   { id: 'bebidas', label: 'Bebidas', color: '#3FD6E6', subtypes: [] },
   { id: 'alcohol', label: 'Alcohol', color: '#A878FF', subtypes: [] },
-  { id: 'otros', label: 'Otros', color: '#7F8AA0', subtypes: [] },
+  { id: 'otros', label: 'Otros', color: '#7F8AA0', subtypes: [CLAUDE_SUBTYPE] },
 ]
 
 export function categoryById(id: string | null): Category | undefined {

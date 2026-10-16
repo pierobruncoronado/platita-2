@@ -4,12 +4,14 @@ export type Route =
   | { name: 'home' }
   | { name: 'capture'; id: string | null }
   | { name: 'incomes' }
+  | { name: 'week' }
   | { name: 'income'; id: string | null; expectedId: string | null }
 
 function parseHash(hash: string): Route {
   let match = /^#\/captura(?:\/([\w-]+))?$/.exec(hash)
   if (match) return { name: 'capture', id: match[1] ?? null }
   if (hash === '#/ingresos') return { name: 'incomes' }
+  if (hash === '#/semana') return { name: 'week' }
   match = /^#\/ingreso(?:\/([\w-]+))?$/.exec(hash)
   if (match) return { name: 'income', id: match[1] ?? null, expectedId: null }
   match = /^#\/confirmar\/(.+)$/.exec(hash)
@@ -38,6 +40,8 @@ function hashOf(route: Route): string {
       return route.id ? `#/captura/${route.id}` : '#/captura'
     case 'incomes':
       return '#/ingresos'
+    case 'week':
+      return '#/semana'
     case 'income':
       if (route.expectedId) return `#/confirmar/${encodeURIComponent(route.expectedId)}`
       return route.id ? `#/ingreso/${route.id}` : '#/ingreso'
@@ -61,7 +65,7 @@ export function useRoute(): Route {
     return () => window.removeEventListener('hashchange', onChange)
   }, [])
   useEffect(() => {
-    if (route.name === 'home' || route.name === 'incomes') lastList = route
+    if (route.name === 'home' || route.name === 'incomes' || route.name === 'week') lastList = route
   }, [route])
   return route
 }

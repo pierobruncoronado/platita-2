@@ -2,7 +2,7 @@
 Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pruebe 1 semana (H10); sin fecha dura · Contexto: personal
 
 ## Estado actual
-Nodo: build · Milestone activo: H9 (adelantado) → luego H5, H6, H7, H8, H10 · Próximo gate: H9 G1 en el Android de Piero (H1–H4 cerrados 2026-10-15)
+Nodo: build · Milestone activo: H5 (implementado, falta push + uso real en el Android) → luego H6, H7, H8, H10 · Pendientes en el Android de Piero: H9 G1 (ver 2 archivos en Descargas) y H5 G1 (H1–H4 cerrados 2026-10-15)
 Saldo real en el teléfono de Piero al cierre de H4: S/380.84 (230.84 + mesada 100 + Claude 50).
 Orden aprobado por Piero (2026-10-16): aviso de versión nueva (hecho, 78617a3) → H9 → H5 → H6 → H7 → H8 → H10.
 Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
@@ -49,12 +49,13 @@ Evidencia:
 - G1 (Playwright, reloj fijado jue 15 17:30 Lima, dispositivo NY): Inicio S/230.84 · "Si llega lo esperado S/360.84" · "Te deben S/130 (Claude S/30 atrasada + Mesada S/100)"; confirmar Mesada (prefill 100) + Claude (prefill 30 → tecleó 50) → En cuenta S/380.84, 0 esperados; suelto Abuelo 60 → 440.84, eliminar (rojo rgb(255,93,115)) → 380.84; viernes sin confirmar → 2 "atrasada" ámbar. `npm test` 50 passed; `npm run test:evals` 12 passed (incl. 5 evals H4 en lenguaje real); lint/tsc ok; regresión H3 OK.
 
 ### H5 — Inicio + Semana (donut, barras diarias, dos números) · cubre: AC-2, AC-4
-- [ ] G1 Aceptación
-- [ ] G2 code-review
-- [ ] G3 DECISIONS.md
+- [ ] G1 Aceptación — PASA en Playwright y evals; falta usarla en el Android de Piero
+- [x] G2 code-review — 9 hallazgos: 5 corregidos, 3 declinados con razón (DECISIONS H5), 1 era el cierre de docs
+- [x] G3 DECISIONS.md
 - [ ] G4 commit + push ({hash})
-- [ ] GV vs tableros Inicio y Semana
+- [x] GV vs tableros Inicio y Semana — PASS
 Evidencia:
+- G1: `npm test` 59 passed; `npm run test:evals` 24 passed (3 evals H5 en lenguaje real: Libre ámbar/verde, Claude fuera de hormigas, proyección del domingo = cierre real); tsc/lint/build ok. Playwright 390×844 (jueves 22 oct 17:30 Lima, dispositivo NY): semana con gastos (1 deshecho y 1 de la semana pasada ignorados) → Libre −S/115 ámbar rgb(255,178,36), En cuenta S/115.84, hormigas S/28, días 9·5·9·5·–·–·–, Jue resaltado; con ingreso S/200 → Libre S/85 verde; semana vacía → S/0 verde; 0 errores de consola; 0 targets <44px. Flujo: Captura Otros → Claude 87 → Libre −S/87, dona S/0 + "Claude S/87 va aparte".
 
 ### H6 — Mes + tarjeta línea base · cubre: vista mensual
 - [ ] G1 Aceptación

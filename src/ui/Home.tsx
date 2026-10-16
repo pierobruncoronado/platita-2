@@ -1,24 +1,24 @@
-import { useLiveQuery } from 'dexie-react-hooks'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { db } from '../db/db'
 import { createExpense } from '../db/movements'
-import { categoryById, QUICK_TILES, RECURRING_TEMPLATES, type QuickTile } from '../domain/catalog'
-import { generateExpected, openExpected } from '../domain/expected'
-import { balanceAt } from '../domain/flow'
+import { categoryById, QUICK_TILES, type QuickTile } from '../domain/catalog'
 import { dayHeader, isSameLocalDay, timeLabel, weekHeader } from '../domain/labels'
-import { formatSoles, formatSolesShort } from '../domain/money'
+import { formatSolesShort } from '../domain/money'
 import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
 import { ExportCard } from './ExportCard'
+import { FreeCard } from './FreeCard'
 import { shortLabel } from './expectedText'
 import { navigate, useNow } from './hooks'
 import { Icon } from './icons'
 import type { ToastInput } from './UndoToast'
+import { useWeekView } from './useWeekView'
 
 export function Home({ settings, onCreated }: { settings: AppSettings; onCreated: (t: ToastInput) => void }) {
   const { tz, opening } = settings
   const [now, refreshNow] = useNow()
-  const movements = useLiveQuery(() => db.movements.toArray(), [])
+  const view = useWeekView(settings, now)
+  const movements = view?.movements
   const [failed, setFailed] = useState(false)
 
   async function tapTile(tile: QuickTile) {
@@ -40,14 +40,8 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
     }
   }
 
-  const balance = useMemo(() => (movements ? balanceAt(movements, now, tz, opening) : null), [movements, now, tz, opening])
-  const open = useMemo(
-    () => (movements ? openExpected(generateExpected(RECURRING_TEMPLATES, now, tz), movements, now) : []),
-    [movements, now, tz],
-  )
-  const owedCents = open.reduce((sum, x) => sum + x.status.remainingCents, 0)
-  // "Si llega lo esperado" = En cuenta + everything still por cobrar (same definition as ifExpectedArrives).
-  const ifArrives = balance ? balance.enCuentaCents + owedCents : null
+  const open = view?.open ?? []
+  const owedCents = view?.owedCents ?? 0
   const today = (movements ?? [])
     .filter((m) => m.status === 'confirmed' && !m.undone && m.occurredAt >= opening.at && isSameLocalDay(m.occurredAt, now, tz))
     .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))
@@ -61,23 +55,7 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
         </div>
       </header>
 
-      <section className="card balance-card" aria-live="polite">
-        <p className="eyebrow">En cuenta</p>
-        <p className="balance" data-testid="balance">
-          {balance ? formatSoles(balance.enCuentaCents) : '…'}
-        </p>
-        {balance && (
-          <p className="muted small">
-            Esta semana {balance.weeklyNetCents > 0 ? '+' : ''}
-            {formatSolesShort(balance.weeklyNetCents)}
-          </p>
-        )}
-        {ifArrives !== null && owedCents > 0 && (
-          <p className="if-arrives small" data-testid="if-arrives">
-            Si llega lo esperado {formatSoles(ifArrives)}
-          </p>
-        )}
-      </section>
+      <FreeCard view={view} />
 
       <section className="section" aria-labelledby="quick-title">
         <h2 id="quick-title" className="section-title">
