@@ -83,7 +83,7 @@ Evidencia:
 - [ ] G1 Aceptación (contenido verificado campo por campo) — PASA en evals + Playwright; falta exportar en el Android de Piero y ver los 2 archivos en Descargas
 - [x] G2 code-review — 10 hallazgos: 9 corregidos, 1 mitigado (descarga múltiple bloqueada no detectable)
 - [x] G3 DECISIONS.md
-- [ ] G4 commit + push ({hash})
+- [x] G4 commit + push — f0a0a1b pushed; Actions run 38860230696 success; bundle público contiene "Exportar todo", "Respalda tus datos", "Hay una versión nueva"
 Evidencia:
 - G1: `npm run test:evals` 21 passed (eval 8: 3 gastos con 1 deshecho + ingreso parcial → JSON con los 4 registros, flags undone/status, todos los campos AC7, timezone + saldo inicial, filas "expected" por cobrar, CSV con mismas filas + comillas/saltos de línea + anti-fórmulas). Playwright: tap Exportar todo → descargas `platita-export-2026-10-16.json` y `.csv` (BOM, 16 columnas, 3 movimientos + 2 por cobrar), recordatorio desaparece, tarjeta "Último respaldo: hoy". `npm test` 50 passed; lint/tsc ok.
 
