@@ -1,9 +1,12 @@
+import { useLiveQuery } from 'dexie-react-hooks'
 import { useState } from 'react'
 import { db } from '../db/db'
 import { createExpense } from '../db/movements'
-import { categoryById, QUICK_TILES, type QuickTile } from '../domain/catalog'
+import { getTileAmounts } from '../db/tiles'
+import { categoryById, type QuickTile } from '../domain/catalog'
 import { dayHeader, isSameLocalDay, timeLabel, weekHeader } from '../domain/labels'
 import { formatSolesShort } from '../domain/money'
+import { resolveTiles } from '../domain/tiles'
 import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
 import { ExportCard } from './ExportCard'
@@ -20,6 +23,9 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
   const [now, refreshNow] = useNow()
   const view = useWeekView(settings, now)
   const movements = view?.movements
+  // undefined = loading, null = unreadable: tiles stay disabled so a tap never books a wrong amount.
+  const tileAmounts = useLiveQuery(() => getTileAmounts(db), [], undefined)
+  const quickTiles = resolveTiles(tileAmounts ?? {})
   const [failed, setFailed] = useState(false)
 
   async function tapTile(tile: QuickTile) {
@@ -65,14 +71,19 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
       <FreeCard view={view} />
 
       <section className="section" aria-labelledby="quick-title">
-        <h2 id="quick-title" className="section-title">
-          Gasto rápido
-        </h2>
+        <div className="section-head">
+          <h2 id="quick-title" className="section-title">
+            Gasto rápido
+          </h2>
+          <a href="#/tiles" className="link-edit">
+            Editar
+          </a>
+        </div>
         <div className="tiles">
-          {QUICK_TILES.map((tile) => {
+          {quickTiles.map((tile) => {
             const color = categoryById(tile.category)?.color
             return (
-              <button key={tile.id} type="button" className="tile" onClick={() => tapTile(tile)}>
+              <button key={tile.id} type="button" className="tile" disabled={!tileAmounts} onClick={() => tapTile(tile)}>
                 <span className="tile-icon" style={{ color, background: `${color}33` }}>
                   <Icon name={tile.icon} size={18} />
                 </span>
@@ -90,6 +101,7 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
             <span className="tile-label">Otro monto</span>
           </a>
         </div>
+        {tileAmounts === null && <p className="error small">No se pudieron leer tus montos. Reabre la app.</p>}
         {failed && <p className="error small">No se pudo guardar. Intenta otra vez.</p>}
       </section>
 

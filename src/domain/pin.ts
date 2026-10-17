@@ -1,7 +1,7 @@
 // PIN lock (spec §4 "PIN lock mechanics"). Pure + Web Crypto; no storage here.
 // The PIN is only ever kept as a salted PBKDF2 hash. Everything fails closed.
 
-export const PIN_LENGTH = 4
+export const PIN_LENGTH = 6
 export const RELOCK_MS = 60_000 // spec decision 6: re-lock after 60 s in the background
 export const FREE_ATTEMPTS = 5
 const BASE_WAIT_MS = 30_000

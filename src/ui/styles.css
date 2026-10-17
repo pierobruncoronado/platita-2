@@ -1392,3 +1392,25 @@ a {
   text-decoration: none;
   cursor: default;
 }
+
+/* ---------- Editar montos ---------- */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link-edit {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.tile:disabled {
+  opacity: 0.55;
+  cursor: default;
+}

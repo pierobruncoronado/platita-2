@@ -5,6 +5,7 @@ import { getOpening, getTimezone, seedDefaults } from '../db/seed'
 import type { Opening } from '../domain/flow'
 import { Capture } from './Capture'
 import { Close } from './Close'
+import { EditTiles } from './EditTiles'
 import { Home } from './Home'
 import { LockGate } from './LockGate'
 import { IncomeForm } from './IncomeForm'
@@ -97,6 +98,7 @@ export function App() {
         />
       )}
       {route.name === 'incomes' && <Incomes settings={state.settings} />}
+      {route.name === 'tiles' && <EditTiles />}
       {route.name === 'close' && <Close settings={state.settings} />}
       {route.name === 'month' && <Month settings={state.settings} />}
       {route.name === 'week' && <Week settings={state.settings} />}

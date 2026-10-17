@@ -36,6 +36,7 @@ export type SettingKey =
   | 'pinLockedUntil' // epoch ms
   | 'biometricId' // WebAuthn credential id (base64url)
   | 'biometricSpike' // 'ok' | 'failed:<reason>'
+  | 'tileAmounts' // JSON {tileId: cents} — only the tiles whose default was edited
 
 export interface Setting {
   key: SettingKey

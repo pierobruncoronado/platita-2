@@ -1,6 +1,20 @@
 # DECISIONS — Platita 2
 Format per entry: **Qué / Por qué / Cómo / Trade-off / Gotcha**. Newest first.
 
+## 2026-10-17 — "Editar" quick-tile amounts
+- **Qué:** "Editar" next to "Gasto rápido" opens a screen where only the default amount of each of the 5 tiles can be changed (keypad, "Restaurar" per tile). Category, name and order are fixed.
+- **Por qué:** v1 gap recorded in spec §4 ("Quick tile amounts", Piero 2026-10-16) — Taxi/Menú/Alcohol amounts vary and a wrong one-tap amount defeats the 1-tap capture.
+- **Cómo:** `domain/tiles.ts` (validation + `resolveTiles`), `db/tiles.ts` (one `tileAmounts` JSON setting, written in one rw transaction), `ui/EditTiles.tsx`. Invalid/unknown stored values fall back to the built-in default; past movements never change.
+- **Trade-off:** a failed read returns `null` (not `{}`) and Home disables the tiles during load/failure — otherwise an edited Taxi S/15 could silently book S/10.
+- **Gotcha:** the Keypad decimal button needed an accessible name for the Playwright test. No design board exists for this screen, so there is no GV comparison; it reuses the Captura keypad and tile styles.
+
+## 2026-10-17 — PIN length 4 → 6 digits
+- **Qué:** `PIN_LENGTH` 4 → 6; the pad, dots and copy follow the constant.
+- **Por qué:** Piero's call (2026-10-17): the PIN must be 6 digits. 10^6 combinations instead of 10^4 against the stored hash.
+- **Cómo:** one constant in `src/domain/pin.ts`; PIN tests/evals moved to 6-digit values; spec §4 updated.
+- **Trade-off:** a PIN already created with 4 digits can no longer be typed (the pad accepts 6) → it is only recoverable through "Olvidé mi PIN" (data kept). Piero had not created his PIN yet at the time of the change.
+- **Gotcha:** no migration written on purpose (no PIN existed in use).
+
 ## 2026-10-16 — H8 PIN lock + fingerprint spike
 - **Qué:** mandatory 4-digit PIN (created twice on the first launch after this deploy, asked on every cold open and after ≥60 s in the background), 5 failures → 30 s wait (doubling every 5, cap 15 min, persisted), "Olvidé mi PIN" (confirm → only the lock is removed, data kept, a new PIN is asked), content covered the instant the page goes to the background, and a "Seguridad" card at the bottom of Inicio with "Activar huella" (WebAuthn platform authenticator, PIN stays the fallback).
 - **Por qué:** spec H8 / AC8 / eval 11 and decisions 2 + 6. Piero's calls (2026-10-16): mandatory from the first launch; forgot-PIN removes only the PIN (not the data); 4 digits with a wait after 5 failures.

@@ -24,9 +24,9 @@ export function takeDraft(): Draft | null {
   return d
 }
 
-export function useAmountInput(initial = '') {
+export function useAmountInput(initial = '', startFresh = false) {
   const [amount, setAmount] = useState(initial)
-  const [fresh, setFresh] = useState(false) // a loaded amount not touched yet: first key replaces it
+  const [fresh, setFresh] = useState(startFresh) // a loaded amount not touched yet: first key replaces it
 
   function load(cents: number) {
     setAmount(centsToInput(cents))

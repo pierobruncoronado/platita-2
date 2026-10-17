@@ -7,6 +7,7 @@ export type Route =
   | { name: 'week' }
   | { name: 'month' }
   | { name: 'close' }
+  | { name: 'tiles' }
   | { name: 'income'; id: string | null; expectedId: string | null }
 
 function parseHash(hash: string): Route {
@@ -16,6 +17,7 @@ function parseHash(hash: string): Route {
   if (hash === '#/semana') return { name: 'week' }
   if (hash === '#/mes') return { name: 'month' }
   if (hash === '#/cerrar') return { name: 'close' }
+  if (hash === '#/tiles') return { name: 'tiles' }
   match = /^#\/ingreso(?:\/([\w-]+))?$/.exec(hash)
   if (match) return { name: 'income', id: match[1] ?? null, expectedId: null }
   match = /^#\/confirmar\/(.+)$/.exec(hash)
@@ -50,6 +52,8 @@ function hashOf(route: Route): string {
       return '#/mes'
     case 'close':
       return '#/cerrar'
+    case 'tiles':
+      return '#/tiles'
     case 'income':
       if (route.expectedId) return `#/confirmar/${encodeURIComponent(route.expectedId)}`
       return route.id ? `#/ingreso/${route.id}` : '#/ingreso'

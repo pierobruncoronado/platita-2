@@ -5,7 +5,7 @@ Spec congelado: 2026-10-15 · Timebox: iterar con uso real hasta que Piero lo pr
 Nodo: build · Milestone activo: H8 (PIN desplegado; falta crear el PIN y el spike de huella en el Android) → luego H10 · Pendientes en el Android de Piero: H9 G1 (2 archivos en Descargas), H5 G1, H6 G1, H7 G1 (cerrar el día) y H8 G1 (crear PIN + probar huella). OJO: tras desplegar H8 la app pide crear un PIN en el primer arranque (H1–H4 cerrados 2026-10-15)
 Saldo real en el teléfono de Piero al cierre de H4: S/380.84 (230.84 + mesada 100 + Claude 50).
 Orden aprobado por Piero (2026-10-16): aviso de versión nueva (hecho, 78617a3) → H9 → H5 → H6 → H7 → H8 → H10.
-Pendiente v1 sin milestone: editar los montos por defecto de los botones rápidos ("Editar"), antes de H10.
+"Editar" montos de botones rápidos: implementado (tsc/lint/107 tests/41 evals verdes, Playwright OK); falta probarlo en el Android. PIN pasó a 6 dígitos (Piero, 2026-10-17) — crear el PIN nuevo con 6.
 
 ## Milestones
 ### H1 — Scaffold PWA + Dexie + zona horaria + saldo inicial · cubre: AC-1 (base), eval 2

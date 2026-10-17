@@ -2,33 +2,33 @@ import { describe, expect, it } from 'vitest'
 import { createPinRecord, isValidPin, lockoutMs, parsePinRecord, shouldRelock, verifyPin } from './pin'
 
 describe('isValidPin', () => {
-  it('accepts exactly 4 digits and nothing else', () => {
-    expect(isValidPin('0420')).toBe(true)
-    for (const bad of ['', '123', '12345', '12a4', ' 123', '１２３４', '12.4']) expect(isValidPin(bad)).toBe(false)
+  it('accepts exactly 6 digits and nothing else', () => {
+    expect(isValidPin('042019')).toBe(true)
+    for (const bad of ['', '123', '12345', '1234567', '12a4', ' 123', '１２３４', '12.4']) expect(isValidPin(bad)).toBe(false)
   })
 })
 
 describe('createPinRecord / verifyPin', () => {
   it('verifies the right PIN and rejects a wrong one, never storing the PIN', async () => {
-    const record = await createPinRecord('4821', 1000)
-    expect(JSON.stringify(record)).not.toContain('4821')
-    expect(await verifyPin('4821', record)).toBe(true)
-    expect(await verifyPin('4822', record)).toBe(false)
+    const record = await createPinRecord('482193', 1000)
+    expect(JSON.stringify(record)).not.toContain('482193')
+    expect(await verifyPin('482193', record)).toBe(true)
+    expect(await verifyPin('482194', record)).toBe(false)
   })
 
   it('salts: the same PIN gives different records', async () => {
-    const a = await createPinRecord('1111', 1000)
-    const b = await createPinRecord('1111', 1000)
+    const a = await createPinRecord('111111', 1000)
+    const b = await createPinRecord('111111', 1000)
     expect(a.salt).not.toBe(b.salt)
     expect(a.hash).not.toBe(b.hash)
   })
 
   it('fails closed on a malformed PIN or a damaged record', async () => {
-    const record = await createPinRecord('1234', 1000)
+    const record = await createPinRecord('123456', 1000)
     expect(await verifyPin('', record)).toBe(false)
     expect(await verifyPin('12', record)).toBe(false)
-    expect(await verifyPin('1234', { ...record, hash: '' })).toBe(false)
-    expect(await verifyPin('1234', { ...record, salt: '***not-base64***' })).toBe(false)
+    expect(await verifyPin('123456', { ...record, hash: '' })).toBe(false)
+    expect(await verifyPin('123456', { ...record, salt: '***not-base64***' })).toBe(false)
   })
 
   it('refuses to create a record for an invalid PIN', async () => {

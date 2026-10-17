@@ -26,10 +26,10 @@ describe('eval 11 (AC8): "dejé el teléfono un rato y alguien lo agarró"', () 
 
   it('someone guessing: 5 wrong PINs → 30 s wait, and even the right PIN is refused during it', async () => {
     const db = freshDb()
-    await setPin(db, '4821')
-    for (let i = 0; i < 5; i++) await tryUnlock(db, '1111', T0)
-    expect(await tryUnlock(db, '4821', T0 + 5_000)).toMatchObject({ ok: false, reason: 'waiting' })
-    expect(await tryUnlock(db, '4821', T0 + 31_000)).toEqual({ ok: true })
+    await setPin(db, '482193')
+    for (let i = 0; i < 5; i++) await tryUnlock(db, '111111', T0)
+    expect(await tryUnlock(db, '482193', T0 + 5_000)).toMatchObject({ ok: false, reason: 'waiting' })
+    expect(await tryUnlock(db, '482193', T0 + 31_000)).toEqual({ ok: true })
   })
 
   it('nothing opens by itself: a missing PIN row is a first launch (setup), a damaged one stays locked', async () => {
@@ -37,12 +37,12 @@ describe('eval 11 (AC8): "dejé el teléfono un rato y alguien lo agarró"', () 
     expect((await getPinState(db)).kind).toBe('none')
     await db.settings.put({ key: 'pinRecord', value: 'garbage' })
     expect((await getPinState(db)).kind).toBe('corrupt')
-    expect(await tryUnlock(db, '4821', T0)).toMatchObject({ ok: false })
+    expect(await tryUnlock(db, '482193', T0)).toMatchObject({ ok: false })
   })
 
   it('"Olvidé mi PIN" removes only the lock: the week of spending is still there', async () => {
     const db = freshDb()
-    await setPin(db, '4821')
+    await setPin(db, '482193')
     await db.movements.add({
       id: 'x', type: 'expense', amountCents: 700, category: 'comida', subtype: 'Snack', note: '', occurredAt: '2026-10-20T17:00:00.000Z',
       createdAt: '2026-10-20T17:00:00.000Z', weekId: '2026-W43', recurringId: null, source: null, status: 'confirmed', undone: false,
