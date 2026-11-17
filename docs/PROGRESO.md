@@ -13,7 +13,7 @@ Pipeline en vivo desde 2026-11-16 17:08 Lima: Supabase `platita` (`ekyoqpucufzhy
 - [x] G2 Script creado y autorizado por Piero — registro de ejecución 17:06 "Permisos concedidos"
 - [x] G3 `instalar()` corrido — 17:08: `{"emails":152,"movements":146,"new":146,"unparsed":0,"hints_applied":2}`; rango 18 ago–16 nov 2026; por mes: ago 30 · sep 53 · oct 40 · nov 24. Trigger horario verificado: corridas 17:42, 18:42 (1 movimiento nuevo sin intervención) y 19:42
 - [x] G4 Revisión post-carga — 0 `unparsed`; 0 posibles duplicados entre fuentes (mismo monto ± 3 min) y 0 dentro de una fuente; re-ejecución de `instalar()` 17:10 → `"new":0` (deduplicación PASA con datos reales). Hallazgo corregido: negritas `*valor*` de Apps Script (DECISIONS)
-- [ ] G5 DECISIONS.md actualizado + commit (sin datos reales) + push — commit local hecho; falta `git push origin main` desde la PC de Piero
+- [x] G5 DECISIONS.md actualizado + commit (sin datos reales) + push — 0995b59 pusheado 2026-11-17
 Evidencia:
 - G0: fixtures en `ingesta/test/fixtures.json`.
 - Línea base últimos 30 días (PE, S/): salió 771.88 en 43 movimientos; "Sin clasificar" 554.48 (72%) = 12 pagos a personas 339.14 + 16 en comercios sin regla 215.34. Reglas con categoría cubren 28% del monto.
@@ -22,7 +22,7 @@ Evidencia:
 - [x] G1 Historial real obtenido y cruzado — 2026-11-16: "Historial de Movimientos" de Yape (xlsx, 431 filas, 19 ago–16 nov) contra `movements` (mismo sentido y monto, ± 3 min, uno a uno)
 - [x] G2 % calculado — **FALLA: 25.7%** en 30 días (49 de 191 movimientos tienen correo); 29.8% en 90 días (145 de 486). Por monto, 30 días: salió S/2,245.72 real vs S/771.88 por correo (34%); entró S/2,226.50 vs S/570.00 (26%). Faltan: 113 yapeos enviados a personas (S/1,471.84), 28 recibidos (S/1,656.50) y 1 pago QR (S/2). Consumos con tarjeta/QR a comercios: 33 de 34 con correo
 - [x] G3 Vía gratis aplicada y vuelta a medir — spec v2.1 + migración `platita_v2_1_statements_and_balance` + `Code.js` 2026-11-17.1; `instalar()` 21:16: `"statements":431,"promoted":341,"linked":90,"new":0,"unparsed":0`. Vuelta a medir: 488 movimientos; últimos 30 días 191 de 191, salió S/2,245.72 y entró S/2,226.50 (idénticos al historial). 0 filas sin enlazar, 0 enlaces dobles; el único par "mismo monto, mismo minuto" entre fuentes son 2 pagos reales distintos (eval 13)
-- [ ] G4 DECISIONS.md con el número medido + commit + push — commit local hecho (ver `git log`); push pendiente: ni la sesión en la nube ni su shell tienen credenciales de GitHub
+- [x] G4 DECISIONS.md con el número medido + commit + push — 0995b59 pusheado 2026-11-17 09:25 con Git GUI (`0c8587e..0995b59 main -> main`)
 Evidencia:
 - Saldo: ancla registrada (lectura de Piero en Yape, 16 nov 21:04) en `balance_anchors`; el depósito por cajero que anunció debe sumarse solo en la siguiente corrida horaria (eval 16).
 - Correos + historial de Yape juntos reconstruyen la cuenta: desde el saldo de v1 (S/230.84, 15 oct 14:31) y 199 movimientos, el saldo calculado nunca baja de cero (mínimo S/0.30 el 30 oct 06:53). Falta validar contra el saldo real que ve Piero.
