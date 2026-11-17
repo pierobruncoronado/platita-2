@@ -3,7 +3,7 @@ Spec v2 congelado: 2026-11-16 · Timebox: modo Perú usable antes del 2026-12-13
 Historial v1 (H1–H10 de captura manual): `git show 0c8587e:docs/PROGRESO.md`. Quedó en H8; H5–H10 nunca tuvieron semana de uso real.
 
 ## Estado actual
-Nodo: build · Milestone activo: H2 (repo a v2) · Próximo gate: H0 G5 / H1 G4 (commit + push, esperan el OK de Piero) → H2 G1 · G-COV cerrado, G-MOCK abierto
+Nodo: build · Milestone activo: H3 (lectura segura) con H2 G2 parcial · H0 y H1 cerrados y pusheados (0995b59, 78d4478) · G-COV cerrado, G-MOCK abierto (H4) · Objetivo de hoy: Inicio v1 lee saldo y gasto de hoy reales de Supabase (cambio de fuente, sin rediseño)
 Pipeline en vivo desde 2026-11-16 17:08 Lima: Supabase `platita` (`ekyoqpucufzhykuxfajc`) + Apps Script "Platita 2 - ingesta Gmail a Supabase" (id `1F7_RIZnF1zAKb1ZcmWCBlVmXRvn52JsodaWNv4YP58_Or_fnmAEVuuA8`, cuenta personal) con trigger horario `cadaHora`.
 
 ## Milestones
@@ -33,6 +33,8 @@ Evidencia:
 - [ ] G3 Endurecimiento: alcance de Gmail de solo lectura evaluado (servicio avanzado de Gmail) y decidido
 - [ ] G4 DECISIONS.md + commit + push
 Evidencia:
+- G2 parcial (2026-11-17): las 10 migraciones aplicadas (`list_migrations`: v2, v2.1, v2.2, v2.3, v2.3b, v2.4–v2.8) copiadas a `supabase/migrations/` leyendo `supabase_migrations.schema_migrations`. Saneadas: sin semillas de `category_rules` (comercios reales), sin el DELETE de filas concretas de v2.5, sin llaves ni datos; grep de secretos/comercios/ancla en `supabase/` → 0 coincidencias. Falta `node ingesta/test/run.mjs` dentro de `npm test` y CI.
+- `instalarRapido()` (trigger de 5 min, solo pruebas) agregado a `Code.js`, reconstruida de la descripción de Piero: comparar con la copia pegada en el editor. `node ingesta/test/run.mjs` → "29 passed, 0 failed".
 
 ### H3 — Lectura segura · cubre: AC-7
 - [ ] G1 Supabase Auth con un solo dueño + políticas select-only; registro público cerrado. Eval 10 PASA (llave publicable sola → 0 filas; llave de ingesta errónea → error)

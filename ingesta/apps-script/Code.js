@@ -352,6 +352,17 @@ function instalar() {
   return r;
 }
 
+/** SOLO FASE DE PRUEBAS: igual que instalar() pero el trigger corre cada 5 minutos. Volver a instalar() lo deja en cada hora. */
+function instalarRapido() {
+  var r = ingest_(CFG.BACKFILL_DAYS, 'backfill');
+  ScriptApp.getProjectTriggers().forEach(function (t) {
+    if (t.getHandlerFunction() === 'cadaHora') ScriptApp.deleteTrigger(t);
+  });
+  ScriptApp.newTrigger('cadaHora').timeBased().everyMinutes(5).create();
+  console.log('Instalado (cada 5 min, pruebas). Carga inicial: ' + JSON.stringify(r));
+  return r;
+}
+
 /** Solo dispara la pantalla de permisos de Google; no lee ni escribe nada. */
 function autorizar() { console.log('Permisos concedidos. Siguiente paso: instalar().'); }
 
