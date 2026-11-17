@@ -41,6 +41,7 @@ Evidencia:
 - [ ] G2 Capa de datos con caché IndexedDB (abre sin internet con el último dato); PIN conservado
 - [ ] G3 code-review sin hallazgos críticos · G4 DECISIONS.md + commit + push
 Evidencia:
+- Paso 4 (2026-11-17): `src/domain/ledger.ts` (saldo = último ancla PEN + movimientos PEN posteriores; flujo hoy/semana por zona IANA vía `time.ts`; USD aparte; filas que no son del servidor lanzan error). `npm test` → 17 files / 115 passed; `npm run test:evals` → 9 files / 49 passed (incluye `ledger.eval.test.ts`: cambio de zona del dispositivo Auckland/NY/UTC con guarda anti-prueba-vacía, gasto rápido local y "esperado" rechazados, dólares aparte); `tsc --noEmit` y eslint sin errores.
 
 ### H4 — G-MOCK + Inicio de solo lectura · cubre: AC-5, AC-10
 - [ ] G1 Mockup HTML de Inicio con datos reales aprobado por Piero → `docs/design-reference/Inicio-v2.html` + colores de categoría congelados en el spec
