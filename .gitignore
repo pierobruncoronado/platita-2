@@ -24,3 +24,6 @@ Thumbs.db
 
 # tool reports (RTK/vitest)
 .vitest/
+
+# Claude Code local settings
+.claude/settings.local.json

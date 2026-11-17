@@ -1,0 +1,341 @@
+{
+  "_note": "Correos reales del Gmail de Piero (ago–nov 2026), saneados para un repo público: nombres de terceros, titular, celular, tarjeta y código de alumno reemplazados; montos, fechas, comercios, etiquetas y formato intactos. Cuerpo recortado tras el bloque de datos.",
+  "cases": [
+    {
+      "name": "BCP consumo en soles, POS Izipay (texto con tablas del conector)",
+      "email": {
+        "id": "fx-bcp-consumo-pen",
+        "from": "BCP Notificaciones <notificaciones@notificacionesbcp.com.pe>",
+        "subject": "Realizaste un consumo con tu Tarjeta de Débito BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-11-15T16:28:17Z",
+        "text": "| |\n| |\n| Hola Titular Prueba, Realizaste un consumo de S/ 6.39 con tu Tarjeta de Débito BCP en IZI*AVIACION C3*001048272. Por tu seguridad, te enviamos los datos de tu operación. |\n| |\n| Monto |\n| |\n\n| |\n| Total del consumo | S/ 6.39 |\n\n| |\n| Datos de la operación |\n| |\n\n| |\n| Operación realizada | Consumo Tarjeta de Débito |\n| Fecha y hora | 15 de noviembre de 2026 - 11:28 AM |\n| Número de Tarjeta de Débito | ****0000 |\n| Empresa | IZI*AVIACION C3*001048272 |\n| Número de operación | 92938819 |\n\n| |\n\n| |\n| | | ¿No reconoces esta operación? Comunícate inmediatamente con nosotros al (01) 311-9898 anexo *911 para ayudarte a verificarla. |"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "card_purchase",
+        "direction": "out",
+        "amount_cents": 639,
+        "currency": "PEN",
+        "occurred_at": "2026-11-15T11:28:00-05:00",
+        "counterparty": "IZI*AVIACION C3*001048272",
+        "counterparty_norm": "AVIACION C3",
+        "operation_id": "92938819",
+        "dedupe_key": "bcp:card_purchase:92938819:2026-11-15"
+      }
+    },
+    {
+      "name": "BCP consumo en dólares (Claude) — mismo correo como texto plano con saltos de línea",
+      "email": {
+        "id": "fx-bcp-consumo-usd",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Realizaste un consumo con tu Tarjeta de Débito BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-11-07T22:15:41Z",
+        "text": "Hola Titular Prueba, Realizaste un consumo de $ 23.60 con tu Tarjeta de Débito BCP en ANTHROPIC* CLAUDE SUB.\nPor tu seguridad, te enviamos los datos de tu operación.\n\nMonto\n\nTotal del consumo\n$ 23.60\n\nDatos de la operación\n\nOperación realizada\nConsumo Tarjeta de Débito\nFecha y hora\n07 de noviembre de 2026 - 05:15 PM\nNúmero de Tarjeta de Débito\n****0000\nEmpresa\nANTHROPIC* CLAUDE SUB\nNúmero de operación\n01393121\n\n¿No reconoces esta operación?"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "card_purchase",
+        "amount_cents": 2360,
+        "currency": "USD",
+        "occurred_at": "2026-11-07T17:15:00-05:00",
+        "counterparty_norm": "ANTHROPIC* CLAUDE SUB",
+        "operation_id": "01393121"
+      }
+    },
+    {
+      "name": "BCP consumo: solo HTML con entidades (ruta de respaldo)",
+      "email": {
+        "id": "fx-bcp-consumo-html",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Realizaste un consumo con tu Tarjeta de Débito BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-11-13T03:15:17Z",
+        "text": "",
+        "html": "<html><head><style>td{color:red}</style></head><body><table><tr><td>Total del consumo</td><td>S/&nbsp;8.45</td></tr><tr><td>Operaci&oacute;n realizada</td><td>Consumo Tarjeta de D&eacute;bito</td></tr><tr><td>Fecha y hora</td><td>12 de noviembre de 2026 - 10:15 PM</td></tr><tr><td>Empresa</td><td>PLIN-NOMBRE APELLIDO</td></tr><tr><td>N&uacute;mero de operaci&oacute;n</td><td>555001</td></tr></table></body></html>"
+      },
+      "expect": {
+        "status": "parsed",
+        "amount_cents": 845,
+        "occurred_at": "2026-11-12T22:15:00-05:00",
+        "counterparty_norm": "PLIN-NOMBRE APELLIDO",
+        "operation_id": "555001"
+      }
+    },
+    {
+      "name": "BCP depósito por cajero (sin nombre de origen, n.º de operación corto)",
+      "email": {
+        "id": "fx-bcp-deposito",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Recibiste un depósito en tu cuenta a través de un cajero automático BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-10-30T14:20:30Z",
+        "text": "| Hola Titular Prueba, Te realizaron un depósito de S/ 100.00. Por tu seguridad, te enviamos los datos de tu depósito. |\n| Monto |\n| Total abonado | S/ 100.00 |\n| Datos de la operación |\n| Operación realizada | Depósito en cuenta |\n| Fecha y hora | 30 de octubre de 2026 - 09:20 AM |\n| Código de cajero | C194904 |\n| Cuenta de abono | XXX-XXXXXXXX-0-00 |\n| Número de operación | 5959 |\n| | | ¿No reconoces esta operación? |"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "atm_deposit",
+        "direction": "in",
+        "amount_cents": 10000,
+        "currency": "PEN",
+        "occurred_at": "2026-10-30T09:20:00-05:00",
+        "counterparty": null,
+        "operation_id": "5959",
+        "dedupe_key": "bcp:atm_deposit:5959:2026-10-30"
+      }
+    },
+    {
+      "name": "BCP retiro en cajero ('setiembre', comisión GRATIS)",
+      "email": {
+        "id": "fx-bcp-retiro",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Realizaste un retiro en un cajero automático BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-09-12T18:24:29Z",
+        "text": "| Hola Titular Prueba, Realizaste un retiro de S/ 670.00 con tu Tarjeta de Débito BCP en un Cajero BCP. |\n| Montos |\n| Total retirado | S/ 670.00 |\n| Comisión por operación | GRATIS |\n| Datos de la operación |\n| Operación realizada | Retiro |\n| Fecha y hora | 12 de setiembre de 2026 - 01:24 PM |\n| Número de Tarjeta de Débito | ************0000 |\n| Código de cajero | C111081 |\n| Cuenta de cargo | XXX-XXXXXXXX-0-00 |\n| Número de operación | 2754 |"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "atm_withdrawal",
+        "direction": "out",
+        "amount_cents": 67000,
+        "occurred_at": "2026-09-12T13:24:00-05:00",
+        "operation_id": "2754"
+      }
+    },
+    {
+      "name": "BCP devolución a la tarjeta",
+      "email": {
+        "id": "fx-bcp-devolucion",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Realizamos una devolución de una operación a tu Tarjeta de Débito BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-09-18T18:30:07Z",
+        "text": "| Hola Titular Prueba, Se ha devuelto el monto de S/ 7.00 a tu cuenta BCP. A continuación, te brindamos los detalles de la devolución. |\n| Monto |\n| Total devuelto | S/ 7.00 |\n| Datos de la operación |\n| Fecha y hora | 18 de setiembre de 2026 - 01:30 PM |\n| Número de Tarjeta | ************0000 |\n| Nombre del Comercio | PLIN-NOMBRE APELLIDO |\n| Número de operación | 891909 |\n| | | Recuerda A través de tu app Banca Móvil BCP puedes revisar los saldos y movimientos de tus cuentas BCP. |"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "refund",
+        "direction": "in",
+        "amount_cents": 700,
+        "occurred_at": "2026-09-18T13:30:00-05:00",
+        "counterparty_norm": "PLIN-NOMBRE APELLIDO",
+        "operation_id": "891909"
+      }
+    },
+    {
+      "name": "BCP yapeo recibido (no trae n.º de operación: llave por minuto+monto+persona)",
+      "email": {
+        "id": "fx-bcp-yapeo-recibido",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Constancia de recepción de Yapeo a celular BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-10-09T13:34:03Z",
+        "text": "| Hola Titular Prueba, Recibiste un yapeo de S/ 20.00 de Persona Uno Ejemplo. Por tu seguridad te enviamos los datos de tu yapeo. |\n| Monto |\n| Monto recibido | S/ 20.00 |\n| Datos de la operación |\n| Operación realizada | Yapeo a celular |\n| Fecha y hora | 09 de octubre de 2026 - 08:34 AM |\n| Enviado por | Persona Uno Ejemplo |\n\n| |\n| | | ¿No reconoces esta operación? Comunícate inmediatamente con nosotros |"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "yape_received",
+        "direction": "in",
+        "amount_cents": 2000,
+        "occurred_at": "2026-10-09T08:34:00-05:00",
+        "counterparty": "Persona Uno Ejemplo",
+        "operation_id": null,
+        "dedupe_key": "bcp:yape_received:2026-10-09T08:34:2000:PERSONA-UNO-EJEMPLO"
+      }
+    },
+    {
+      "name": "Yape yapeo enviado a persona (negritas con asteriscos, 'p. m.')",
+      "email": {
+        "id": "fx-yape-enviado",
+        "from": "YAPE Notificaciones <notificaciones@yape.pe>",
+        "subject": "Por tu seguridad, te notificaremos por cada yapeo que realices",
+        "receivedAt": "2026-10-17T02:36:57Z",
+        "text": "*¡Hola, TITULAR PRUEBA C.!*\n\n*¡Acabas de yapear exitosamente!*\n\n*Monto de yapeo**\n\nS/ 1.50\n\nYapero TITULAR PRUEBA C. Tu número de celular XXXXXXXXX000 Fecha y Hora de la operación 16 octubre 2026 - 09:36 p. m. Celular del Beneficiario XXXXXXXXX000 Nombre del Beneficiario PERSONA DOS EJEMPLO L. Nº de operación 8104199\n\n*Por tu seguridad, te notificaremos por cada\nyapeo que realices."
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "yape_sent",
+        "direction": "out",
+        "amount_cents": 150,
+        "occurred_at": "2026-10-16T21:36:00-05:00",
+        "counterparty": "PERSONA DOS EJEMPLO L.",
+        "operation_id": "8104199",
+        "dedupe_key": "yape:yape_sent:8104199:2026-10-16"
+      }
+    },
+    {
+      "name": "Yape pago a comercio (Pago exitoso, ID alfanumérico)",
+      "email": {
+        "id": "fx-yape-pago",
+        "from": "notificaciones@yape.pe",
+        "subject": "Pago exitoso",
+        "receivedAt": "2026-10-18T19:50:37Z",
+        "text": "Hola TITULAR,\n¡Tu pago en APUESTAS-BETANO\n fue exitoso!\n\nMonto total S/ 40.00\n\nFecha y hora: 18 octubre 2026 - 02:50 p. m.\n\nTitular: TITULAR DE PRUEBA\n\nCelular: *** *** 000\n\nID de operación: 01M5891P01FMQKM9CNQW823BDR\n\nSi tú no hiciste este pago, comunícate con nosotros"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "yape_payment",
+        "amount_cents": 4000,
+        "occurred_at": "2026-10-18T14:50:00-05:00",
+        "counterparty": "APUESTAS-BETANO",
+        "operation_id": "01M5891P01FMQKM9CNQW823BDR"
+      }
+    },
+    {
+      "name": "Yape Promos: constancia (el movimiento) con mes abreviado 'sept.'",
+      "email": {
+        "id": "fx-yape-promo",
+        "from": "notificaciones@yape.pe",
+        "subject": "Envío Automático - Constancia de Transferencia - Yape",
+        "receivedAt": "2026-09-03T20:18:33Z",
+        "text": "Hola TITULAR, ¡Tu pago en Yape Promos fue exitoso!\n\nMonto total\n\nS/ 8.90\n\nFecha y hora: 03 sept. 2026 - 03:18 p. m.\n\nTitular: TITULAR DE PRUEBA\n\nCelular: *** *** 000\n\nNúmero de\noperación Yape: 214822\n\nSi tú no hiciste este pago"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "yape_payment",
+        "amount_cents": 890,
+        "occurred_at": "2026-09-03T15:18:00-05:00",
+        "counterparty": "Yape Promos",
+        "operation_id": "214822"
+      }
+    },
+    {
+      "name": "Yape Promos: 'Tu compra de X fue exitosa' es una pista del comercio real, no un segundo gasto",
+      "email": {
+        "id": "fx-yape-promo-hint",
+        "from": "notificaciones@yape.pe",
+        "subject": "Tu compra de Bembos fue exitosa",
+        "receivedAt": "2026-09-03T20:18:33Z",
+        "text": "*¡Yapeaste tu promo!* 1 Clásica Regular + 1 Papa Regular\n\nAcércate con tu código al local de Bembos más cercano y canjea tu promo solo de lunes a viernes.\n\nComercio: *Bembos* Monto total: *S/ 8.9* Cantidad: *1* Titular: *TITULAR DE PRUEBA* Celular: *••• ••• 000* Fecha y hora: *03/09/2026 a las 15:18*\n\n*Si tú no hiciste esta compra"
+      },
+      "expect": {
+        "status": "hint",
+        "hint_amount_cents": 890,
+        "hint_occurred_at": "2026-09-03T15:18:00-05:00",
+        "hint_counterparty": "Bembos"
+      }
+    },
+    {
+      "name": "Yape pago de servicio (UPC), mes 'Ago.' y 'pm' sin puntos",
+      "email": {
+        "id": "fx-yape-servicio",
+        "from": "notificaciones@yape.pe",
+        "subject": "Tu yapeo de servicio ha sido confirmado",
+        "receivedAt": "2026-08-14T01:30:14Z",
+        "text": "Hola *TITULAR,*\n¡Tu servicio fue yapeado con éxito!\n\nMonto total\nS/ 76.00\n\nYapero(a): TITULAR DE PRUEBA\n\nNúmero de celular: *** *** 000\n\nFecha y hora: 13 Ago. 2026 - 08:30 pm\n\nNº de operación Yape: 01754597\n\nDetalle del servicio:\n\nEmpresa: UPC - Universidad Peruana de Ciencias Aplicadas\n\nServicio: UPC Soles\n\nCódigo de usuario: U000000000\n\nTitular del servicio: Titular De Prueba"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "yape_service",
+        "amount_cents": 7600,
+        "occurred_at": "2026-08-13T20:30:00-05:00",
+        "counterparty": "UPC - Universidad Peruana de Ciencias Aplicadas",
+        "counterparty_norm": "UPC - UNIVERSIDAD PERUANA DE CIENCIAS APLICADAS",
+        "operation_id": "01754597"
+      }
+    },
+    {
+      "name": "Yape afiliación a comercio: no es un movimiento",
+      "email": {
+        "id": "fx-yape-afiliacion",
+        "from": "notificaciones@yape.pe",
+        "subject": "¡Tu afiliación en APUESTAS-BETANO fue exitosa!",
+        "receivedAt": "2026-10-18T19:48:50Z",
+        "text": "Yape es tu método de pago en APUESTAS-BETANO"
+      },
+      "expect": {
+        "status": "ignored"
+      }
+    },
+    {
+      "name": "Asunto de BCP que aún no conocemos: queda 'unparsed' con su texto, no se pierde",
+      "email": {
+        "id": "fx-bcp-desconocido",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Constancia de Transferencia a terceros - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-11-01T10:00:00Z",
+        "text": "Monto transferido S/ 50.00"
+      },
+      "expect": {
+        "status": "unparsed"
+      }
+    },
+    {
+      "name": "Tipo conocido pero con el formato roto (sin monto): 'unparsed', nunca un movimiento a medias",
+      "email": {
+        "id": "fx-bcp-roto",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Realizaste un consumo con tu Tarjeta de Débito BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-11-01T10:00:00Z",
+        "text": "Fecha y hora 01 de noviembre de 2026 - 05:00 AM Empresa TAMBO Número de operación 1"
+      },
+      "expect": {
+        "status": "unparsed"
+      }
+    },
+    {
+      "name": "Remitente ajeno: se ignora y ni siquiera se registra",
+      "email": {
+        "id": "fx-ajeno",
+        "from": "promo@otrobanco.pe",
+        "subject": "Realizaste un consumo",
+        "receivedAt": "2026-11-01T10:00:00Z",
+        "text": "Total del consumo S/ 1.00"
+      },
+      "expect": {
+        "status": "ignored"
+      }
+    },
+    {
+      "name": "BCP consumo tal como lo entrega getPlainBody() de Apps Script: valores envueltos en *negrita* (hallado en la carga real del 16 nov)",
+      "email": {
+        "id": "fx-bcp-consumo-appsscript",
+        "from": "BCP Notificaciones <notificaciones@notificacionesbcp.com.pe>",
+        "subject": "Realizaste un consumo con tu Tarjeta de Débito BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-11-07T22:15:41Z",
+        "text": "Hola *Titular Prueba*,\nRealizaste un consumo de *$ 23.60* con tu Tarjeta de Débito BCP en *ANTHROPIC* CLAUDE SUB*.\n\nMonto\nTotal del consumo *$ 23.60*\n\nOperación realizada *Consumo Tarjeta de Débito*\nFecha y hora *07 de noviembre de 2026 - 05:15 PM*\nNúmero de Tarjeta de Débito *****0000*\nEmpresa *ANTHROPIC* CLAUDE SUB*\nNúmero de operación *01393199*\n\n¿No reconoces esta operación?"
+      },
+      "expect": {
+        "status": "parsed",
+        "amount_cents": 2360,
+        "currency": "USD",
+        "occurred_at": "2026-11-07T17:15:00-05:00",
+        "counterparty": "ANTHROPIC* CLAUDE SUB",
+        "counterparty_norm": "ANTHROPIC* CLAUDE SUB",
+        "operation_id": "01393199",
+        "dedupe_key": "bcp:card_purchase:01393199:2026-11-07"
+      }
+    },
+    {
+      "name": "BCP consumo Izipay con negrita de Apps Script: se quita el envoltorio y luego el prefijo IZI* y la terminal",
+      "email": {
+        "id": "fx-bcp-izi-appsscript",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Realizaste un consumo con tu Tarjeta de Débito BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-10-31T21:05:04Z",
+        "text": "Total del consumo *S/ 10.50* Fecha y hora *31 de octubre de 2026 - 04:05 PM* Empresa *IZI*MARKET LAS*00591641* Número de operación *123456*"
+      },
+      "expect": {
+        "status": "parsed",
+        "amount_cents": 1050,
+        "counterparty": "IZI*MARKET LAS*00591641",
+        "counterparty_norm": "MARKET LAS",
+        "operation_id": "123456"
+      }
+    },
+    {
+      "name": "BCP yapeo recibido tal como lo entrega Apps Script: negritas y espacios de ancho cero; el nombre no debe arrastrar el pie del correo (bug real del 16 nov)",
+      "email": {
+        "id": "fx-bcp-yapeo-recibido-appsscript",
+        "from": "notificaciones@notificacionesbcp.com.pe",
+        "subject": "Constancia de recepción de Yapeo a celular BCP - Servicio de Notificaciones BCP",
+        "receivedAt": "2026-08-28T23:08:30Z",
+        "text": "Hola *Titular Prueba*,\nRecibiste un yapeo de *S/ 43.00* de *Persona Tres Ejemplo*.\n\nMonto recibido *S/ 43.00*\nOperación realizada *Yapeo a celular*\nFecha y hora *28 de agosto de 2026 - 06:08 PM*\nEnviado por *Persona Tres Ejemplo*\n\n*¿No reconoces esta operación?* Comunícate inmediatamente con nosotros al (01)​ 311​-9898 anexo *911 para ayudarte a verificarla.\n*¡Seguimos transformando tus planes en realidad!*"
+      },
+      "expect": {
+        "status": "parsed",
+        "kind": "yape_received",
+        "amount_cents": 4300,
+        "occurred_at": "2026-08-28T18:08:00-05:00",
+        "counterparty": "Persona Tres Ejemplo",
+        "counterparty_norm": "PERSONA TRES EJEMPLO",
+        "dedupe_key": "bcp:yape_received:2026-08-28T18:08:4300:PERSONA-TRES-EJEMPLO"
+      }
+    }
+  ]
+}
