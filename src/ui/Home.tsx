@@ -4,25 +4,39 @@ import { db } from '../db/db'
 import { createExpense } from '../db/movements'
 import { getTileAmounts } from '../db/tiles'
 import { categoryById, type QuickTile } from '../domain/catalog'
-import { dayHeader, isSameLocalDay, timeLabel, weekHeader } from '../domain/labels'
-import { formatSolesShort } from '../domain/money'
+import { dayHeader, timeLabel, weekHeader } from '../domain/labels'
+import { dayRange } from '../domain/ledger'
+import { formatSolesShort, formatUsd } from '../domain/money'
+import { toMs } from '../domain/time'
 import { resolveTiles } from '../domain/tiles'
 import type { AppSettings } from './App'
 import { BottomNav } from './BottomNav'
 import { ExportCard } from './ExportCard'
 import { SecurityCard } from './SecurityCard'
 import { FreeCard } from './FreeCard'
-import { shortLabel } from './expectedText'
-import { navigate, useNow } from './hooks'
+import { useNow } from './hooks'
 import { Icon } from './icons'
+import { Login } from './Login'
 import type { ToastInput } from './UndoToast'
+import { useLedger } from './useLedger'
 import { useWeekView } from './useWeekView'
 
+// Server movement kinds that need a readable name when there is no counterparty.
+const KIND_LABEL: Record<string, string> = {
+  refund: 'Devolución',
+  atm_deposit: 'Depósito por cajero',
+  atm_withdrawal: 'Retiro de cajero',
+  yape_received: 'Yape recibido',
+  yape_sent: 'Yape enviado',
+  yape_payment: 'Pago con Yape',
+  card_purchase: 'Compra con tarjeta',
+}
+
 export function Home({ settings, onCreated }: { settings: AppSettings; onCreated: (t: ToastInput) => void }) {
-  const { tz, opening } = settings
+  const { tz } = settings
   const [now, refreshNow] = useNow()
   const view = useWeekView(settings, now)
-  const movements = view?.movements
+  const ledger = useLedger(tz)
   // undefined = loading, null = unreadable: tiles stay disabled so a tap never books a wrong amount.
   const tileAmounts = useLiveQuery(() => getTileAmounts(db), [], undefined)
   const quickTiles = resolveTiles(tileAmounts ?? {})
@@ -47,11 +61,14 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
     }
   }
 
-  const open = view?.open ?? []
-  const owedCents = view?.owedCents ?? 0
-  const today = (movements ?? [])
-    .filter((m) => m.status === 'confirmed' && !m.undone && m.occurredAt >= opening.at && isSameLocalDay(m.occurredAt, now, tz))
-    .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))
+  // "Hoy" lists the owner's SERVER rows only; what is tapped in "Gasto rápido" is stored locally and never shown here.
+  const today = (() => {
+    if (ledger.kind !== 'ready') return []
+    const { startMs, endMs } = dayRange(now, tz)
+    return ledger.snapshot.movements
+      .filter((m) => toMs(m.occurredAt) >= startMs && toMs(m.occurredAt) < endMs)
+      .sort((a, b) => b.occurredAt.localeCompare(a.occurredAt))
+  })()
 
   return (
     <main className="screen with-nav">
@@ -68,7 +85,7 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
         )}
       </header>
 
-      <FreeCard view={view} />
+      {ledger.kind === 'login' ? <Login /> : <FreeCard ledger={ledger} now={now} tz={tz} />}
 
       <section className="section" aria-labelledby="quick-title">
         <div className="section-head">
@@ -105,22 +122,6 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
         {failed && <p className="error small">No se pudo guardar. Intenta otra vez.</p>}
       </section>
 
-      {owedCents > 0 && (
-        <section className="owed-card" aria-label="Te deben">
-          <div className="row-main">
-            <span className="row-title">Te deben {formatSolesShort(owedCents)}</span>
-            <span className="owed-sub">
-              {open
-                .map(({ item, status }) => `${shortLabel(item)} ${formatSolesShort(status.remainingCents)}${status.state === 'overdue' ? ' (atrasada)' : ''}`)
-                .join(' + ')}
-            </span>
-          </div>
-          <a href="#/ingresos" className="btn-green">
-            Confirmar
-          </a>
-        </section>
-      )}
-
       {view && (
         <section className="close-card" aria-label="Cierra el día" data-testid="close-card">
           <div className="row-main">
@@ -141,35 +142,28 @@ export function Home({ settings, onCreated }: { settings: AppSettings; onCreated
         <h2 id="today-title" className="section-title">
           Hoy
         </h2>
-        {today.length === 0 ? (
-          <p className="muted small empty">Nada anotado hoy.</p>
+        {ledger.kind !== 'ready' ? (
+          <p className="muted small empty">{ledger.kind === 'loading' ? 'Cargando…' : 'Inicia sesión para ver tus movimientos de hoy.'}</p>
+        ) : today.length === 0 ? (
+          <p className="muted small empty">Sin movimientos hoy.</p>
         ) : (
-          <ul className="list">
-            {today.map((m) => {
-              const cat = categoryById(m.category)
-              const isIncome = m.type === 'income'
+          <ul className="list" data-testid="today-list">
+            {today.map((m, i) => {
+              const isIncome = m.direction === 'in'
+              const amount = m.currency === 'USD' ? formatUsd(m.amountCents) : formatSolesShort(m.amountCents)
               return (
-                <li key={m.id}>
-                  <button
-                    type="button"
-                    className="row"
-                    onClick={() =>
-                      navigate(isIncome ? { name: 'income', id: m.id, expectedId: null } : { name: 'capture', id: m.id })
-                    }
-                  >
-                    <span className="dot" style={{ background: isIncome ? 'var(--green)' : cat?.color }} aria-hidden="true" />
+                <li key={`${m.occurredAt}-${i}`}>
+                  <div className="row">
+                    <span className="dot" style={{ background: isIncome ? 'var(--green)' : 'var(--muted)' }} aria-hidden="true" />
                     <span className="row-main">
-                      <span className="row-title">{isIncome ? (m.source ?? 'Ingreso') : (m.subtype ?? cat?.label ?? 'Gasto')}</span>
-                      <span className="row-sub">
-                        {m.note ? `${m.note} · ` : ''}
-                        {timeLabel(m.occurredAt, tz)}
-                      </span>
+                      <span className="row-title">{m.counterparty || KIND_LABEL[m.kind] || 'Movimiento'}</span>
+                      <span className="row-sub">{timeLabel(m.occurredAt, tz)}</span>
                     </span>
                     <span className={`row-amount ${isIncome ? 'income' : ''}`}>
                       {isIncome ? '+' : ''}
-                      {formatSolesShort(m.amountCents)}
+                      {amount}
                     </span>
-                  </button>
+                  </div>
                 </li>
               )
             })}

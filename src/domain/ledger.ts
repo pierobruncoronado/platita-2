@@ -13,6 +13,8 @@ export interface LedgerMovement {
   amountCents: number
   currency: Currency
   kind: string
+  // Display only (the "Hoy" list); never used by the math.
+  counterparty?: string | null
 }
 
 // A row of public.balance_anchors.

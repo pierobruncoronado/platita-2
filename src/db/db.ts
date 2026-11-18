@@ -43,10 +43,17 @@ export interface Setting {
   value: string | number
 }
 
+// Last successful read of the owner's server rows, so Inicio opens offline. Plaintext on the device (PIN-gated).
+export interface LedgerCacheRow {
+  key: 'last'
+  value: string // JSON of LedgerSnapshot
+}
+
 export class PlatitaDB extends Dexie {
   movements!: EntityTable<Movement, 'id'>
   settings!: EntityTable<Setting, 'key'>
   closes!: EntityTable<DayClose, 'day'>
+  ledgerCache!: EntityTable<LedgerCacheRow, 'key'>
 
   constructor(name = 'platita') {
     super(name)
@@ -59,6 +66,13 @@ export class PlatitaDB extends Dexie {
       movements: 'id, type, occurredAt, weekId, recurringId, status',
       settings: 'key',
       closes: 'day',
+    })
+    // v3 (H3): offline cache of the server ledger. Additive — existing stores are untouched.
+    this.version(3).stores({
+      movements: 'id, type, occurredAt, weekId, recurringId, status',
+      settings: 'key',
+      closes: 'day',
+      ledgerCache: 'key',
     })
   }
 }

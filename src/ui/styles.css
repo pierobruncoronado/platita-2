@@ -1414,3 +1414,46 @@ a {
   opacity: 0.55;
   cursor: default;
 }
+
+/* ---------- Login (H3) ---------- */
+.login-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.login-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.login-field input {
+  min-height: 48px;
+  padding: 0 14px;
+  font-size: 16px;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.login-submit {
+  justify-content: center;
+  min-height: 48px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.login-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
