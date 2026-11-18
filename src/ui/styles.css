@@ -1457,3 +1457,22 @@ a {
   opacity: 0.6;
   cursor: default;
 }
+
+/* "Gastado hoy": neutral on purpose. Amber/red are status only and gold is Ahorro (spec colors). */
+.today-line {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.today-line svg {
+  color: var(--muted);
+}

@@ -73,7 +73,7 @@ function ReadyCard({ ledger, now, tz }: { ledger: Ready; now: string; tz: string
           Entró {formatSolesShort(enteredCents)}
         </span>
       </div>
-      <p className="sunday-line" data-testid="spent-today">
+      <p className="today-line" data-testid="spent-today">
         <Icon name="clock" size={18} />
         <span>Gastado hoy {formatSolesShort(Math.max(0, n.todayPen.outCents))}</span>
       </p>
@@ -84,7 +84,7 @@ function ReadyCard({ ledger, now, tz }: { ledger: Ready; now: string; tz: string
         </p>
       )}
       {stale && (
-        <p className="muted small" data-testid="stale">
+        <p className="small tone-warn" data-testid="stale">
           Sin conexión · datos {ageLabel(snapshot.fetchedAt, now)}
         </p>
       )}
